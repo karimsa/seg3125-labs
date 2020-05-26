@@ -1,0 +1,173 @@
+* {
+	margin: 0;
+	padding: 0;
+
+	box-sizing: border-box;
+}
+
+html {
+	font-family: sans-serif;
+	font-size: 12px;
+}
+
+body {
+	background-color: #0bc6a3;
+}
+
+html,
+body,
+.container {
+	height: 100%;
+	width: 100%;
+}
+
+.container {
+	display: flex;
+}
+
+.col {
+	flex-grow: 1;
+	flex-basis: 0;
+	height: 100%;
+	display: inline-block;
+	padding: 1.5rem;
+}
+
+h1 {
+	font-size: 2rem;
+	margin-bottom: .5rem;
+	color: #034035;
+}
+
+h2 {
+	font-size: 1.75rem;
+}
+
+p {
+	color: #056251;
+	font-size: 1.5rem;
+}
+
+button {
+	color: #fff;
+	background-color: #07997e;
+	border: solid 2px #034035;
+
+	padding: 1rem 1.75rem;
+	font-size: 1.5rem;
+
+	border: none;
+	border-radius: 5px;
+
+	display: inline-block;
+	cursor: pointer;
+}
+
+img {
+	max-width: 100%;
+}
+
+.d-flex { display: flex; }
+.justify-content-center { justify-content: center; }
+.align-items-center { align-items: center; }
+.text-center { text-align: center }
+.flex-grow-1 { flex-grow: 1; flex-basis: 0 }
+
+.lift {
+	cursor: pointer;
+}
+
+.lift:hover {
+	transform: translateY(-5px);
+}
+
+.lift, .lift:hover {
+	transition: transform .25s ease;
+}
+
+.form-group {
+	padding: 1rem;
+	margin-bottom: 2rem;
+}
+  
+.form-group label {
+	display: block;
+	font-size: 1.75rem;
+	margin-bottom: 1rem;
+	font-weight: bold;
+}
+  
+input, select, textarea {
+	border: none;
+	padding: 1rem 1.5rem;
+	border-radius: 5px;
+	font-size: 1.5rem;
+	display: block;
+	width: 100%;
+}
+
+select, textarea {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+input:focus, select:focus, textarea:focus {
+	box-shadow: 0 0px 15px rgb(131, 65, 185);
+}
+
+input, input:focus,
+select, select:focus,
+textarea, textarea:focus {
+	transition: .25s box-shadow ease;
+}
+
+.position-relative {
+	position: relative;
+}
+
+.select-arrow {
+	position: absolute;
+	
+	right: 5px;
+	top: 50%;
+	
+	margin-top: -9px;
+	margin-right: 5px;
+	
+	width: 20px;
+	height: 20px;
+
+	background-image: url("data:image/svg+xml,%3Csvg class='bi bi-arrow-down-circle-fill' width='1em' height='1em' viewBox='0 0 16 16' fill='currentColor' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 5a.5.5 0 0 0-1 0v4.793L5.354 7.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 9.793V5z'%3E%3C/path%3E%3C/svg%3E");
+	background-size: 100% 100%;
+	background-position: center center;
+	background-repeat: no-repeat;
+
+	pointer-events: none;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+table td, table th {
+	font-size: 1.25rem;
+	padding: 1rem;
+}
+
+table tbody > tr {
+	border-radius: 10px;
+}
+
+table tbody > tr:nth-of-type(2n + 1) {
+	background-color: #0cac8e;
+}
+
+footer {
+	padding: 2rem;
+}
+
+footer a {
+	text-decoration: none;
+	border-bottom: dotted 2px;
+}
