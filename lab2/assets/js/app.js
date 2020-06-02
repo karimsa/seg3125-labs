@@ -19,6 +19,8 @@ function BestSellersList({ numProducts, openProductModal }) {
 	const { data: products } = Products.usePreviewProducts({
 		numProducts,
 	})
+	numProducts = Math.min(numProducts, products.length)
+
 	const [currentProductIndex, setCurrentProductIndex] = useState(0)
 	useEffect(() => {
 		setCurrentProductIndex(0)

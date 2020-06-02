@@ -7,6 +7,7 @@ const ProductCategories = Object.freeze({
 	Vegetables: 'Vegetables',
 	Meat: 'Meat',
 	Pantry: 'Pantry',
+	Dairy: 'Dairy',
 })
 
 const productCollection = [
@@ -40,6 +41,46 @@ const productCollection = [
 			type: 'g',
 		},
 	},
+	{
+		id: 3,
+		name: 'Neilson 2% (4L)',
+		category: ProductCategories.Dairy,
+		imageURL: '/lab2/assets/images/neilson-4l-2p.jpg',
+		price: {
+			amount: 3.99,
+			type: 'bag',
+		},
+	},
+	{
+		id: 4,
+		name: 'Eggs (1 dozen)',
+		category: ProductCategories.Dairy,
+		imageURL: '/lab2/assets/images/eggs-1-dozen.jpg',
+		price: {
+			amount: 7.99,
+			type: 'dozen',
+		},
+	},
+	{
+		id: 5,
+		name: 'Heinz Ketchup (397g)',
+		category: ProductCategories.Pantry,
+		imageURL: '/lab2/assets/images/heinz-ketchup.jpg',
+		price: {
+			amount: 1.99,
+			type: 'bottle',
+		},
+	},
+	{
+		id: 6,
+		name: 'Arm & Hammer - Baking Soda (454g)',
+		category: ProductCategories.Pantry,
+		imageURL: '/lab2/assets/images/arm-baking-soda.jpg',
+		price: {
+			amount: 1.99,
+			type: 'box',
+		},
+	},
 ]
 
 // Let's preload the images for perf
@@ -59,8 +100,8 @@ export const Products = {
 			if (currentUser) {
 				const results = []
 				for (const product of productCollection) {
-					if (currentUser.diet[product.category] !== false) {
-						results.push(product)
+					if (currentUser.diet[product.category] !== false && results.push(product) === numProducts) {
+						break
 					}
 				}
 				return {
