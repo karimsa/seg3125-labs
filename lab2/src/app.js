@@ -334,7 +334,7 @@ function App() {
 			</div>
 
 			${
-				query
+				query.trim()
 					? html`
 							<p
 								className="font-weight-${searchResults.results.length === 0
