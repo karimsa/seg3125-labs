@@ -13,7 +13,8 @@ import { Users } from './models/users.js'
 import { Products, rounded } from './models/products.js'
 import { Modal, useModal } from './modal.js'
 import { StoreProvider } from './store.js'
-import { useProductModal } from './product-modal.js'
+import { useProductModal, ProductQuantityForm } from './product-modal.js'
+import { useQueryParam } from './hooks.js'
 
 function BestSellersList({ numProducts, openProductModal }) {
 	const { data: products } = Products.usePreviewProducts({
@@ -109,17 +110,22 @@ function ShoppingCartMenuItem({ quantity, productID, openProductModal }) {
 	const { data: product } = Products.useFindById(productID)
 
 	return html`
-		<li className="dropdown-item clickable" onClick=${(evt) => {
-			evt.preventDefault()
-			openProductModal(product)
-		}}>
-			<span className="badge badge-pill badge-secondary mr-2"
-				>${quantity}</span
-			>
-			<span>${product.name}</span>
-			<span className="ml-4"
-				>$${rounded(quantity * product.price.amount)}</span
-			>
+		<li
+			className="dropdown-item clickable"
+			onClick=${(evt) => {
+				evt.preventDefault()
+				openProductModal(product)
+			}}
+		>
+			<div className="d-flex">
+				<div className="col pl-0">
+					<span className="badge badge-pill badge-secondary mr-2">${quantity}</span>
+					<span>${product.name}</span>
+				</div>
+				<div className="col text-right pr-0">
+					<span className="ml-4">$${rounded(quantity * product.price.amount)}</span>
+				</div>
+			</div>
 		</li>
 	`
 }
@@ -158,7 +164,10 @@ function ShoppingCartMenu({ openProductModal }) {
 				>
 			</a>
 
-			<div className="dropdown-menu dropdown-menu-right py-3 overflow-hidden" id="cart">
+			<div
+				className="dropdown-menu dropdown-menu-right py-3 overflow-hidden"
+				id="cart"
+			>
 				<h6 className="dropdown-header">Items</h6>
 
 				${currentUser.activeCart.length === 0
@@ -196,6 +205,31 @@ function ShoppingCartMenu({ openProductModal }) {
 	`
 }
 
+function ProductSearchResult({ product }) {
+	return html`
+		<div className="card">
+			<div className="card-body row">
+				<div className="col-2">
+					<img src="${product.imageURL}" className="img-fluid" />
+				</div>
+				<div className="col d-flex align-items-center">
+					<div className="row w-100">
+						<div className="col">
+							<p className="mb-2">${product.name}</p>
+							<p className="mb-0">
+								$${rounded(product.price.amount)} per ${product.price.type}
+							</p>
+						</div>
+						<div className="col text-right">
+							<${ProductQuantityForm} product=${product} />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	`
+}
+
 function App() {
 	const { data: currentUser, mutate: updateUser } = Users.useCurrentUser()
 	const { data: categories } = Products.useProductCategories()
@@ -205,13 +239,17 @@ function App() {
 
 	const [settingsRef, { openModal: openSettingsModal }] = useModal()
 	const [{ openProductModal }, productModal] = useProductModal()
+	const [query, setQuery] = useQueryParam('query')
+	const { data: searchResults } = Products.useSearch({
+		query,
+	})
 
 	const browseDropdownRef = useRef()
 	useEffect(() => {
 		return () => {
 			$(browseDropdownRef.current).dropdown('hide')
 		}
-	})
+	}, [])
 
 	return html`
 		<nav className="navbar navbar-expand-lg navbar-light bg-light py-4">
@@ -241,13 +279,17 @@ function App() {
 					<div className="col">
 						${categories.map(
 							(category) => html`
-								<div className="form-check cursor-pointer" onClick=${() => updateUser({
-									...currentUser,
-									diet: {
-										...currentUser.diet,
-										[category]: !currentUser.diet[category],
-									},
-								})}>
+								<div
+									className="form-check cursor-pointer"
+									onClick=${() =>
+										updateUser({
+											...currentUser,
+											diet: {
+												...currentUser.diet,
+												[category]: !currentUser.diet[category],
+											},
+										})}
+								>
 									<input
 										className="form-check-input"
 										type="checkbox"
@@ -277,6 +319,8 @@ function App() {
 								type="text"
 								placeholder="Search for fruits, vegetables, and meat"
 								className="form-control-lg form-control rounded-lg"
+								value=${query}
+								onInput=${(evt) => setQuery(evt.target.value)}
 							/>
 						</div>
 					</div>
@@ -286,33 +330,46 @@ function App() {
 			</div>
 
 			${
-				bestSellers.length > 0 &&
-				html`
-					<div className="row pb-4 mb-5">
-						<div className="col">
-							<${BestSellersList}
-								numProducts=${3}
-								openProductModal=${openProductModal}
-							/>
-						</div>
-					</div>
-				`
-			}
+				query
+					? html`
+							<p className="font-weight-${searchResults.results.length === 0 ? 'bold' : 'normal'}">
+								Found ${searchResults.results.length} of${' '}
+								${searchResults.totalDocs} matches.
+								${searchResults.totalHidden > 0 && html`<span className="text-muted ml-1">(${searchResults.totalHidden} hidden results to match your dietary preferences.)</span>`}
+							</p>
 
-			<div className="row pb-4 mb-5">
-				<div className="col">
-					<${CategoryGallery}
-						openProductModal=${openProductModal}
-					/>
-				</div>
-			</div>
+							${searchResults.results.map(
+								(product) =>
+									html`<${ProductSearchResult} product=${product} />`,
+							)}
+					  `
+					: html`
+							${bestSellers.length > 0 &&
+							html`
+								<div className="row pb-4 mb-5">
+									<div className="col">
+										<${BestSellersList}
+											numProducts=${3}
+											openProductModal=${openProductModal}
+										/>
+									</div>
+								</div>
+							`}
+
+							<div className="row pb-4 mb-5">
+								<div className="col">
+									<${CategoryGallery} openProductModal=${openProductModal} />
+								</div>
+							</div>
+					  `
+			}
 		</div>
 
-		<footer className="container py-4">
+		<footer className="container py-4 mt-5">
 			<div className="row">
 				<div className="col text-center">
 					<p className="mb-0">Website designed & built by <a href="https://alibhai.co" rel="noreferrer noopener" target="_blank">Karim Alibhai</a></p>
-					<p>Built using Bootstrap, Preact, htm, and lots of other great technologies.</p>
+					<p className="mb-0">Built using Bootstrap, Preact, htm, and lots of other great technologies.</p>
 				</div>
 			</div>
 		</footer>

@@ -24,6 +24,7 @@ const productCollection = [
 	{
 		id: 1,
 		name: 'AAA Steak',
+		keywords: ['beef'],
 		category: ProductCategories.Meat,
 		imageURL: '/lab2/assets/images/steak.jpg',
 		price: {
@@ -44,6 +45,7 @@ const productCollection = [
 	{
 		id: 3,
 		name: 'Neilson 2% (4L)',
+		keywords: ['milk'],
 		category: ProductCategories.Dairy,
 		imageURL: '/lab2/assets/images/neilson-4l-2p.jpg',
 		price: {
@@ -64,6 +66,7 @@ const productCollection = [
 	{
 		id: 5,
 		name: 'Heinz Ketchup (397g)',
+		keywords: ['condiments'],
 		category: ProductCategories.Pantry,
 		imageURL: '/lab2/assets/images/heinz-ketchup.jpg',
 		price: {
@@ -100,7 +103,10 @@ export const Products = {
 			if (currentUser) {
 				const results = []
 				for (const product of productCollection) {
-					if (currentUser.diet[product.category] !== false && results.push(product) === numProducts) {
+					if (
+						currentUser.diet[product.category] !== false &&
+						results.push(product) === numProducts
+					) {
 						break
 					}
 				}
@@ -117,6 +123,30 @@ export const Products = {
 	useProductCategories() {
 		return {
 			data: Object.keys(ProductCategories),
+		}
+	},
+
+	useSearch({ query }) {
+		const { data: currentUser } = Users.useCurrentUser()
+		const pttn = new RegExp(query, 'i')
+
+		let totalHidden = 0
+		const results = productCollection.filter((product) => {
+			const match = (product.name.match(pttn) || product.category.match(pttn) || (product.keywords && product.keywords.find(key => key.match(pttn))))
+			const allowed = currentUser.diet[product.category] !== false
+
+			if (match && !allowed) {
+				totalHidden++
+			}
+			return match && allowed
+		})
+
+		return {
+			data: {
+				results,
+				totalDocs: productCollection.length,
+				totalHidden,
+			},
 		}
 	},
 

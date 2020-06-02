@@ -1,5 +1,9 @@
+body {
+	background-color: #edf2f9;
+}
+
 .navbar-light.bg-light {
-	background-color: #fff !important;
+	background: transparent !important;
 }
 
 .navbar-brand,
@@ -13,18 +17,23 @@ p,
 	border-radius: 2rem !important;
 }
 
-.btn,
+.btn:disabled,
+.btn.disabled {
+	cursor: not-allowed;
+}
+
+.btn:not(:disabled):not(.disabled),
 .clickable {
 	cursor: pointer;
 }
 
-.btn:hover,
+.btn:not(:disabled):not(.disabled):hover,
 .clickable:hover {
 	transform: scale(1.1);
 }
 
 .btn,
-.btn:hover,
+.btn:not(:disabled):not(.disabled):hover,
 .clickable,
 .clickable:hover {
 	transition: 0.3s transform ease;
@@ -32,4 +41,11 @@ p,
 
 .cursor-pointer {
 	cursor: pointer;
+}
+
+.card {
+	border: none;
+
+	/* Bootstrap's .shadow-sm */
+	box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
 }

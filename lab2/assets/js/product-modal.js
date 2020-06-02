@@ -9,8 +9,11 @@ import { Users } from './models/users.js'
 import { rounded } from './models/products.js'
 
 function pluralize(num, unit) {
-	if (unit === 'unit') {
-		return num === 1 ? 'unit' : 'units'
+	if (num === 1) {
+		return unit
+	}
+	if (!unit.endsWith('s')) {
+		return unit + 's'
 	}
 	return unit
 }
@@ -28,7 +31,7 @@ function localize(unit, name) {
 	}
 }
 
-export function ProductModal({ product, modalRef }) {
+export function ProductQuantityForm({ product }) {
 	const { data: currentUser, mutate: updateUser } = Users.useCurrentUser()
 	const cartEntry = currentUser.activeCart.find(
 		(entry) => entry.productID === product.id,
@@ -66,6 +69,77 @@ export function ProductModal({ product, modalRef }) {
 	}
 
 	return html`
+		<form
+			className="row"
+			onSubmit=${(evt) => {
+				evt.preventDefault()
+				updateUser({
+					...currentUser,
+					activeCart: [
+						...currentUser.activeCart,
+						{
+							productID: product.id,
+							quantity,
+						},
+					],
+				})
+			}}
+		>
+			<div className="col">
+				<input
+					type="number"
+					className="form-control"
+					min="0"
+					max="100"
+					step="1"
+					value=${quantity}
+					onChange=${(evt) => setQuantity(evt.target.value)}
+				/>
+			</div>
+			<div className="col-auto">
+				${cartItem
+					? html`
+							<div className="btn-group">
+								<button
+									type="button"
+									className="btn btn-primary"
+									onClick=${() => updateQuantity(quantity)}
+								>
+									Update cart
+								</button>
+								<button
+									type="button"
+									className="btn btn-danger"
+									onClick=${() => updateQuantity(0)}
+								>
+									Remove from cart
+								</button>
+							</div>
+					  `
+					: html`<button
+							type="submit"
+							className="btn btn-success"
+							disabled=${quantity < 1}
+					  >
+							Add to cart
+					  </button>`}
+			</div>
+		</form>
+		${cartEntry &&
+		html`<p className="font-weight-normal small mt-2 mb-0">
+			There is currently${' '}
+			${cartEntry.quantity}${product.price.type === 'g' || product.price.type === 'kg' ? '' : ' '}${pluralize(
+				cartEntry.quantity,
+				product.price.type,
+			)}${' '}
+			of this item in your cart for a total of${' '}
+			$${rounded(cartEntry.quantity * product.price.amount)}.
+		</p>`}
+	`
+}
+
+export function ProductModal({ product, modalRef }) {
+	return html`
 			<${Modal} className="p-0 d-flex flex-row" size="xl" modalRef=${modalRef}>
 				<img
 					src=${product.imageURL}
@@ -77,73 +151,7 @@ export function ProductModal({ product, modalRef }) {
 							<h5>${product.name}</h5>
 							<p>${product.price.amount} per ${localize(product.price.type, product.name)}</p>
 
-							<form className="row" onSubmit=${(evt) => {
-								evt.preventDefault()
-								updateUser({
-									...currentUser,
-									activeCart: [
-										...currentUser.activeCart,
-										{
-											productID: product.id,
-											quantity,
-										},
-									],
-								})
-							}}>
-								<div className="col-4">
-									<input
-										type="number"
-										className="form-control"
-										min="0"
-										max="100"
-										step="1"
-										value=${quantity}
-										onChange=${(evt) => setQuantity(evt.target.value)}
-									/>
-								</div>
-								<div className="col">
-									${
-										cartItem
-											? html`
-													<div className="btn-group">
-														<button
-															type="button"
-															className="btn btn-primary"
-															onClick=${() => updateQuantity(quantity)}
-														>
-															Update cart
-														</button>
-														<button
-															type="button"
-															className="btn btn-danger"
-															onClick=${() => updateQuantity(0)}
-														>
-															Remove from cart
-														</button>
-													</div>
-											  `
-											: html`<button
-													type="submit"
-													className="btn btn-success"
-													disabled=${quantity < 1}
-											  >
-													Add to cart
-											  </button>`
-									}
-								</div>
-							</form>
-							${
-								cartEntry &&
-								html`<p className="font-weight-normal small mt-2">
-									There are currently${' '}
-									${cartEntry.quantity}${pluralize(
-										cartEntry.quantity,
-										product.price.type,
-									)}${' '}
-									of ${product.price.type.toLowerCase()} in your cart for a total of${' '}
-									$${rounded(cartEntry.quantity * product.price.amount)}.
-								</p>`
-							}
+							<${ProductQuantityForm} product=${product} />
 						</div>
 					</div>
 				</div>
