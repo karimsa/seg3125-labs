@@ -17,10 +17,14 @@ function pluralize(num, unit) {
 
 function localize(unit, name) {
 	switch (unit) {
-		case 'g': return 'gram'
-		case 'kg': return 'kilogram'
-		case 'unit': return name.toLowerCase()
-		default: return unit
+		case 'g':
+			return 'gram'
+		case 'kg':
+			return 'kilogram'
+		case 'unit':
+			return name.toLowerCase()
+		default:
+			return unit
 	}
 }
 
@@ -131,8 +135,13 @@ export function ProductModal({ product, modalRef }) {
 							${
 								cartEntry &&
 								html`<p className="font-weight-normal small mt-2">
-									There are currently ${cartEntry.quantity}${pluralize(cartEntry.quantity, product.price.type)} of these in your
-									cart for a total of $${rounded(cartEntry.quantity * product.price.amount)}.
+									There are currently${' '}
+									${cartEntry.quantity}${pluralize(
+										cartEntry.quantity,
+										product.price.type,
+									)}${' '}
+									of ${product.price.type.toLowerCase()} in your cart for a total of${' '}
+									$${rounded(cartEntry.quantity * product.price.amount)}.
 								</p>`
 							}
 						</div>

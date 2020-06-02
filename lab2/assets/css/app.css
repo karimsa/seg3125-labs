@@ -29,3 +29,7 @@ p,
 .clickable:hover {
 	transition: 0.3s transform ease;
 }
+
+.cursor-pointer {
+	cursor: pointer;
+}

@@ -107,21 +107,17 @@ function ShoppingCartMenuItem({ quantity, productID, openProductModal }) {
 	const { data: product } = Products.useFindById(productID)
 
 	return html`
-		<li className="dropdown-item">
-			<a
-				href="#"
-				className="dropdown-link"
-				onClick=${(evt) => {
-					evt.preventDefault()
-					openProductModal(product)
-				}}
+		<li className="dropdown-item clickable" onClick=${(evt) => {
+			evt.preventDefault()
+			openProductModal(product)
+		}}>
+			<span className="badge badge-pill badge-secondary mr-2"
+				>${quantity}</span
 			>
-				<span className="badge badge-pill badge-secondary mr-2"
-					>${quantity}</span
-				>
-				<span>${product.name}</span>
-				<span className="ml-4">$${rounded(quantity * product.price.amount)}</span>
-			</a>
+			<span>${product.name}</span>
+			<span className="ml-4"
+				>$${rounded(quantity * product.price.amount)}</span
+			>
 		</li>
 	`
 }
@@ -132,7 +128,7 @@ function ShoppingCartMenu({ openProductModal }) {
 	const summary = useMemo(() => {
 		const price = currentUser.activeCart.reduce((total, entry) => {
 			const product = Products.findById(entry.productID)
-			return total + (product.price.amount * entry.quantity)
+			return total + product.price.amount * entry.quantity
 		}, 0)
 		const tax = price * 0.13
 		const total = price + tax
@@ -160,7 +156,7 @@ function ShoppingCartMenu({ openProductModal }) {
 				>
 			</a>
 
-			<div className="dropdown-menu dropdown-menu-right py-3" id="cart">
+			<div className="dropdown-menu dropdown-menu-right py-3 overflow-hidden" id="cart">
 				<h6 className="dropdown-header">Items</h6>
 
 				${currentUser.activeCart.length === 0
@@ -176,7 +172,7 @@ function ShoppingCartMenu({ openProductModal }) {
 								/>
 							`,
 					  )}
-				
+
 				<div className="dropdown-divider my-4" />
 
 				<li className="d-flex justify-content-between px-4">
@@ -187,7 +183,9 @@ function ShoppingCartMenu({ openProductModal }) {
 					<span>Tax</span>
 					<span className="text-right">$${rounded(summary.tax)}</span>
 				</li>
-				<li className="d-flex justify-content-between px-4 py-1 font-weight-bold">
+				<li
+					className="d-flex justify-content-between px-4 py-1 font-weight-bold"
+				>
 					<span>Total</span>
 					<span className="text-right">$${rounded(summary.total)}</span>
 				</li>
@@ -241,21 +239,19 @@ function App() {
 					<div className="col">
 						${categories.map(
 							(category) => html`
-								<div className="form-check">
+								<div className="form-check cursor-pointer" onClick=${() => updateUser({
+									...currentUser,
+									diet: {
+										...currentUser.diet,
+										[category]: !currentUser.diet[category],
+									},
+								})}>
 									<input
 										className="form-check-input"
 										type="checkbox"
 										checked=${currentUser.diet[category] !== false}
-										onChange=${(evt) =>
-											updateUser({
-												...currentUser,
-												diet: {
-													...currentUser.diet,
-													[category]: evt.target.checked,
-												},
-											})}
 									/>
-									<label className="form-check-label">
+									<label className="form-check-label cursor-pointer">
 										${category}
 									</label>
 								</div>
