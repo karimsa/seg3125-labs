@@ -87,21 +87,26 @@ function CategoryGallery({ setQuery }) {
 
 		<div class="row">
 			${categories.map(
-				(category) => currentUser.diet[category.label] !== false && html`
-					<div class="col-6 clickable" onClick=${() => setQuery(category.label)}>
+				(category) =>
+					currentUser.diet[category.label] !== false &&
+					html`
 						<div
-							className="card"
-							style="
+							class="col-6 clickable"
+							onClick=${() => setQuery(category.label)}
+						>
+							<div
+								className="card"
+								style="
 						background-image: url(${category.image});
 						background-size: cover;
 						background-position: center center;
 					"
-						>
-							<div className="card-body py-5 my-4"></div>
+							>
+								<div className="card-body py-5 my-4"></div>
+							</div>
+							<p className="small font-weight-bold">${category.label}</p>
 						</div>
-						<p className="small font-weight-bold">${category.label}</p>
-					</div>
-				`,
+					`,
 			)}
 		</div>
 	`
@@ -371,7 +376,10 @@ function App() {
 
 							<div className="row pb-4 mb-5">
 								<div className="col">
-									<${CategoryGallery} setQuery=${setQuery} openProductModal=${openProductModal} />
+									<${CategoryGallery}
+										setQuery=${setQuery}
+										openProductModal=${openProductModal}
+									/>
 								</div>
 							</div>
 					  `
