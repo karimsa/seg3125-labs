@@ -1,5 +1,5 @@
-import 'https://unpkg.com/jquery'
-import 'https://unpkg.com/bootstrap/dist/js/bootstrap.min.js'
+import $ from 'jquery'
+import 'bootstrap/dist/js/bootstrap.min.js'
 import {
 	html,
 	render,
@@ -7,7 +7,7 @@ import {
 	useState,
 	useEffect,
 	useMemo,
-} from 'https://unpkg.com/htm/preact/standalone.module.js'
+} from 'htm/preact/standalone.module.js'
 
 import { Users } from './models/users.js'
 import { Products, rounded } from './models/products.js'
@@ -91,14 +91,14 @@ function CategoryGallery() {
 						<div
 							className="card"
 							style="
-						background-image: url(/lab2/assets/images/category-${category.toLowerCase()}.jpg);
+						background-image: url(${category.image});
 						background-size: cover;
 						background-position: center center;
 					"
 						>
 							<div className="card-body py-5 my-4"></div>
 						</div>
-						<p className="small font-weight-bold">${category}</p>
+						<p className="small font-weight-bold">${category.label}</p>
 					</div>
 				`,
 			)}
@@ -286,17 +286,17 @@ function App() {
 											...currentUser,
 											diet: {
 												...currentUser.diet,
-												[category]: !currentUser.diet[category],
+												[category.label]: !currentUser.diet[category.label],
 											},
 										})}
 								>
 									<input
 										className="form-check-input"
 										type="checkbox"
-										checked=${currentUser.diet[category] !== false}
+										checked=${currentUser.diet[category.label] !== false}
 									/>
 									<label className="form-check-label cursor-pointer">
-										${category}
+										${category.label}
 									</label>
 								</div>
 							`,

@@ -4,7 +4,7 @@ import {
 	useContext,
 	useState,
 	useEffect,
-} from 'https://unpkg.com/htm/preact/standalone.module.js'
+} from 'htm/preact/standalone.module.js'
 
 const StoreCtx = createContext()
 

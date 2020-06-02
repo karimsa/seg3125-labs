@@ -2,7 +2,7 @@ import {
 	html,
 	useEffect,
 	useState,
-} from 'https://unpkg.com/htm/preact/standalone.module.js'
+} from 'htm/preact/standalone.module.js'
 
 import { Modal, useModal } from './modal.js'
 import { Users } from './models/users.js'

@@ -1,13 +1,26 @@
-import { useMemo } from 'https://unpkg.com/htm/preact/standalone.module.js'
+import $ from 'jquery'
+import { useMemo } from 'htm/preact/standalone.module.js'
 
 import { Users } from './users.js'
+import imgApple from '../images/apples.jpg'
+import imgSteak from '../images/steak.jpg'
+import imgAsparagus from '../images/asparagus.jpg'
+import imgNeilson4L from '../images/neilson-4l-2p.jpg'
+import imgEggsDozen from '../images/eggs-1-dozen.jpg'
+import imgHeinzKetchup from '../images/heinz-ketchup.jpg'
+import imgBakingSoda from '../images/arm-baking-soda.jpg'
+import imgCategoryFruits from '../images/category-fruits.jpg'
+import imgCategoryVegetables from '../images/category-vegetables.jpg'
+import imgCategoryMeat from '../images/category-meat.jpg'
+import imgCategoryPantry from '../images/category-pantry.jpg'
+import imgCategoryDairy from '../images/category-dairy.jpg'
 
 const ProductCategories = Object.freeze({
-	Fruits: 'Fruits',
-	Vegetables: 'Vegetables',
-	Meat: 'Meat',
-	Pantry: 'Pantry',
-	Dairy: 'Dairy',
+	Fruits: {label:'Fruits',image:imgCategoryFruits},
+	Vegetables: {label:'Vegetables',image:imgCategoryVegetables},
+	Meat: {label:'Meat',image:imgCategoryMeat},
+	Pantry: {label:'Pantry',image:imgCategoryPantry},
+	Dairy: {label:'Dairy',image:imgCategoryDairy},
 })
 
 const productCollection = [
@@ -15,7 +28,7 @@ const productCollection = [
 		id: 0,
 		name: 'Apples',
 		category: ProductCategories.Fruits,
-		imageURL: '/lab2/assets/images/apples.jpg',
+		imageURL: imgApple,
 		price: {
 			amount: 0.99,
 			type: 'apple',
@@ -26,7 +39,7 @@ const productCollection = [
 		name: 'AAA Steak',
 		keywords: ['beef'],
 		category: ProductCategories.Meat,
-		imageURL: '/lab2/assets/images/steak.jpg',
+		imageURL: imgSteak,
 		price: {
 			amount: 10.99,
 			type: 'kg',
@@ -36,7 +49,7 @@ const productCollection = [
 		id: 2,
 		name: 'Asparagus',
 		category: ProductCategories.Vegetables,
-		imageURL: '/lab2/assets/images/asparagus.jpg',
+		imageURL: imgAsparagus,
 		price: {
 			amount: 4.99,
 			type: 'g',
@@ -47,7 +60,7 @@ const productCollection = [
 		name: 'Neilson 2% (4L)',
 		keywords: ['milk'],
 		category: ProductCategories.Dairy,
-		imageURL: '/lab2/assets/images/neilson-4l-2p.jpg',
+		imageURL: imgNeilson4L,
 		price: {
 			amount: 3.99,
 			type: 'bag',
@@ -57,7 +70,7 @@ const productCollection = [
 		id: 4,
 		name: 'Eggs (1 dozen)',
 		category: ProductCategories.Dairy,
-		imageURL: '/lab2/assets/images/eggs-1-dozen.jpg',
+		imageURL: imgEggsDozen,
 		price: {
 			amount: 7.99,
 			type: 'dozen',
@@ -68,7 +81,7 @@ const productCollection = [
 		name: 'Heinz Ketchup (397g)',
 		keywords: ['condiments'],
 		category: ProductCategories.Pantry,
-		imageURL: '/lab2/assets/images/heinz-ketchup.jpg',
+		imageURL: imgHeinzKetchup,
 		price: {
 			amount: 1.99,
 			type: 'bottle',
@@ -78,7 +91,7 @@ const productCollection = [
 		id: 6,
 		name: 'Arm & Hammer - Baking Soda (454g)',
 		category: ProductCategories.Pantry,
-		imageURL: '/lab2/assets/images/arm-baking-soda.jpg',
+		imageURL: imgBakingSoda,
 		price: {
 			amount: 1.99,
 			type: 'box',
@@ -104,7 +117,7 @@ export const Products = {
 				const results = []
 				for (const product of productCollection) {
 					if (
-						currentUser.diet[product.category] !== false &&
+						currentUser.diet[product.category.label] !== false &&
 						results.push(product) === numProducts
 					) {
 						break
@@ -122,7 +135,7 @@ export const Products = {
 
 	useProductCategories() {
 		return {
-			data: Object.keys(ProductCategories),
+			data: Object.values(ProductCategories),
 		}
 	},
 
@@ -132,8 +145,8 @@ export const Products = {
 
 		let totalHidden = 0
 		const results = productCollection.filter((product) => {
-			const match = (product.name.match(pttn) || product.category.match(pttn) || (product.keywords && product.keywords.find(key => key.match(pttn))))
-			const allowed = currentUser.diet[product.category] !== false
+			const match = (product.name.match(pttn) || product.category.label.match(pttn) || (product.keywords && product.keywords.find(key => key.match(pttn))))
+			const allowed = currentUser.diet[product.category.label] !== false
 
 			if (match && !allowed) {
 				totalHidden++

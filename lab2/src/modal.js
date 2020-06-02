@@ -1,8 +1,9 @@
+import $ from 'jquery'
 import {
 	html,
 	useRef,
 	useEffect,
-} from 'https://unpkg.com/htm/preact/standalone.module.js'
+} from 'htm/preact/standalone.module.js'
 
 export function useModal() {
 	const ref = useRef()

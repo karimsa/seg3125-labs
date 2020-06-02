@@ -1,4 +1,4 @@
-import { useState } from 'https://unpkg.com/htm/preact/standalone.module.js'
+import { useState } from 'htm/preact/standalone.module.js'
 
 export function useQueryParam(name, defaultValue = '') {
 	const searchParams = new URLSearchParams(location.search)
