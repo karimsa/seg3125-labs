@@ -2,7 +2,10 @@
 	background-color: #fff !important;
 }
 
-.navbar-brand, p, .nav-link, .btn {
+.navbar-brand,
+p,
+.nav-link,
+.btn {
 	font-weight: bold;
 }
 
@@ -10,7 +13,8 @@
 	border-radius: 2rem !important;
 }
 
-.btn, .clickable {
+.btn,
+.clickable {
 	cursor: pointer;
 }
 
@@ -23,5 +27,5 @@
 .btn:hover,
 .clickable,
 .clickable:hover {
-	transition: .3s transform ease;
+	transition: 0.3s transform ease;
 }

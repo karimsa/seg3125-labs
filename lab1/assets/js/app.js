@@ -1,9 +1,9 @@
-(function() {
-	const $ = q => [].slice.call(document.querySelectorAll(q))
+;(function () {
+	const $ = (q) => [].slice.call(document.querySelectorAll(q))
 
 	const mainPreview = $('#preview img')[0]
 
-	$('#gallery img').forEach(img => {
+	$('#gallery img').forEach((img) => {
 		img.addEventListener('click', () => {
 			mainPreview.src = img.src
 		})
@@ -16,7 +16,9 @@
 		'Popovers',
 		'Progress',
 		'Scrollspy',
-	].map((text, index) => `
+	]
+		.map(
+			(text, index) => `
 		<tr>
 			<td>${text}</td>
 			<td>
@@ -29,5 +31,7 @@
 				<input type="radio" name="opt-${index}" />
 			</td>
 		</tr>
-	`).join('')
-}())
+	`,
+		)
+		.join('')
+})()

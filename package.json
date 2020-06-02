@@ -1,5 +1,9 @@
 {
+  "scripts": {
+	  "lint": "prettier --write lab*/assets/**/**.{css,js,html}"
+  },
   "devDependencies": {
-    "lite-server": "^2.5.4"
+    "lite-server": "^2.5.4",
+    "prettier": "^2.0.5"
   }
 }

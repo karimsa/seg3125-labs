@@ -16,10 +16,11 @@ export const Users = {
 		}
 		return {
 			data: store.currentUser,
-			mutate: data => setStore({
-				...store,
-				currentUser: data,
-			}),
+			mutate: (data) =>
+				setStore({
+					...store,
+					currentUser: data,
+				}),
 		}
 	},
 }

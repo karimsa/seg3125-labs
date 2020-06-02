@@ -1,4 +1,8 @@
-import { html, useRef, useEffect } from 'https://unpkg.com/htm/preact/standalone.module.js'
+import {
+	html,
+	useRef,
+	useEffect,
+} from 'https://unpkg.com/htm/preact/standalone.module.js'
 
 export function useModal() {
 	const ref = useRef()
@@ -6,10 +10,13 @@ export function useModal() {
 		return () => $(ref.current).modal('hide')
 	}, [])
 
-	return [ref, {
-		openModal: () => $(ref.current).modal('show'),
-		closeModal: () => $(ref.current).modal('hide'),
-	}]
+	return [
+		ref,
+		{
+			openModal: () => $(ref.current).modal('show'),
+			closeModal: () => $(ref.current).modal('hide'),
+		},
+	]
 }
 
 export function Modal({ modalRef, className = '', children }) {

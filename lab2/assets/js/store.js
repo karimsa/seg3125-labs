@@ -1,4 +1,10 @@
-import { html, createContext, useContext, useState, useEffect } from 'https://unpkg.com/htm/preact/standalone.module.js'
+import {
+	html,
+	createContext,
+	useContext,
+	useState,
+	useEffect,
+} from 'https://unpkg.com/htm/preact/standalone.module.js'
 
 const StoreCtx = createContext()
 
@@ -7,7 +13,9 @@ export function useStore() {
 }
 
 export function StoreProvider({ children }) {
-	const [store, setStore] = useState(() => JSON.parse(localStorage.getItem('store') || '{}'))
+	const [store, setStore] = useState(() =>
+		JSON.parse(localStorage.getItem('store') || '{}'),
+	)
 	useEffect(() => {
 		localStorage.setItem('store', JSON.stringify(store))
 	}, [store])
