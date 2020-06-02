@@ -6,6 +6,23 @@ import {
 
 import { Modal, useModal } from './modal.js'
 import { Users } from './models/users.js'
+import { rounded } from './models/products.js'
+
+function pluralize(num, unit) {
+	if (unit === 'unit') {
+		return num === 1 ? 'unit' : 'units'
+	}
+	return unit
+}
+
+function localize(unit, name) {
+	switch (unit) {
+		case 'g': return 'gram'
+		case 'kg': return 'kilogram'
+		case 'unit': return name.toLowerCase()
+		default: return unit
+	}
+}
 
 export function ProductModal({ product, modalRef }) {
 	const { data: currentUser, mutate: updateUser } = Users.useCurrentUser()
@@ -54,7 +71,7 @@ export function ProductModal({ product, modalRef }) {
 					<div className="row">
 						<div className="col">
 							<h5>${product.name}</h5>
-							<p>${product.price.amount} per ${product.price.type}</p>
+							<p>${product.price.amount} per ${localize(product.price.type, product.name)}</p>
 
 							<form className="row" onSubmit=${(evt) => {
 								evt.preventDefault()
@@ -114,8 +131,8 @@ export function ProductModal({ product, modalRef }) {
 							${
 								cartEntry &&
 								html`<p className="font-weight-normal small mt-2">
-									There are currently ${cartEntry.quantity} of these in your
-									cart.
+									There are currently ${cartEntry.quantity}${pluralize(cartEntry.quantity, product.price.type)} of these in your
+									cart for a total of $${rounded(cartEntry.quantity * product.price.amount)}.
 								</p>`
 							}
 						</div>

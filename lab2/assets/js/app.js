@@ -6,10 +6,11 @@ import {
 	useRef,
 	useState,
 	useEffect,
+	useMemo,
 } from 'https://unpkg.com/htm/preact/standalone.module.js'
 
 import { Users } from './models/users.js'
-import { Products } from './models/products.js'
+import { Products, rounded } from './models/products.js'
 import { Modal, useModal } from './modal.js'
 import { StoreProvider } from './store.js'
 import { useProductModal } from './product-modal.js'
@@ -119,6 +120,7 @@ function ShoppingCartMenuItem({ quantity, productID, openProductModal }) {
 					>${quantity}</span
 				>
 				<span>${product.name}</span>
+				<span className="ml-4">$${rounded(quantity * product.price.amount)}</span>
 			</a>
 		</li>
 	`
@@ -126,6 +128,21 @@ function ShoppingCartMenuItem({ quantity, productID, openProductModal }) {
 
 function ShoppingCartMenu({ openProductModal }) {
 	const { data: currentUser } = Users.useCurrentUser()
+
+	const summary = useMemo(() => {
+		const price = currentUser.activeCart.reduce((total, entry) => {
+			const product = Products.findById(entry.productID)
+			return total + (product.price.amount * entry.quantity)
+		}, 0)
+		const tax = price * 0.13
+		const total = price + tax
+
+		return {
+			price,
+			tax,
+			total,
+		}
+	}, [currentUser.activeCart])
 
 	return html`
 		<li className="nav-item dropdown">
@@ -143,7 +160,9 @@ function ShoppingCartMenu({ openProductModal }) {
 				>
 			</a>
 
-			<div className="dropdown-menu dropdown-menu-right" id="cart">
+			<div className="dropdown-menu dropdown-menu-right py-3" id="cart">
+				<h6 className="dropdown-header">Items</h6>
+
 				${currentUser.activeCart.length === 0
 					? html`<li className="text-muted px-3 text-center">
 							Your cart is empty.
@@ -157,6 +176,21 @@ function ShoppingCartMenu({ openProductModal }) {
 								/>
 							`,
 					  )}
+				
+				<div className="dropdown-divider my-4" />
+
+				<li className="d-flex justify-content-between px-4">
+					<span>Subtotal</span>
+					<span className="text-right">$${rounded(summary.price)}</span>
+				</li>
+				<li className="d-flex justify-content-between px-4">
+					<span>Tax</span>
+					<span className="text-right">$${rounded(summary.tax)}</span>
+				</li>
+				<li className="d-flex justify-content-between px-4 py-1 font-weight-bold">
+					<span>Total</span>
+					<span className="text-right">$${rounded(summary.total)}</span>
+				</li>
 			</div>
 		</li>
 	`

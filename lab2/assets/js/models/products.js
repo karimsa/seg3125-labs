@@ -17,7 +17,7 @@ const productCollection = [
 		imageURL: '/lab2/assets/images/apples.jpg',
 		price: {
 			amount: 0.99,
-			type: 'unit',
+			type: 'apple',
 		},
 	},
 	{
@@ -46,6 +46,11 @@ const productCollection = [
 productCollection.forEach(({ imageURL }) => {
 	$(`<img src="${imageURL}" class="d-none" />`).appendTo(document.body)
 })
+
+export function rounded(num) {
+	num = Math.round(num * 1e2) / 1e2
+	return num.toFixed(2)
+}
 
 export const Products = {
 	usePreviewProducts({ numProducts }) {
