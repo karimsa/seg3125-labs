@@ -63,6 +63,7 @@ export function ProductQuantityForm({ product }) {
 				),
 			})
 		}
+		setQuantity(0)
 	}
 
 	return html`
