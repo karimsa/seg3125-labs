@@ -1,3 +1,4 @@
+import $ from 'jquery'
 import { html, useEffect, useState } from 'htm/preact/standalone.module.js'
 
 import { Modal, useModal } from './modal.js'
