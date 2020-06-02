@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "lite-server"
+	"start": "lite-server",
+	"build": "echo nothing to build"
   },
   "devDependencies": {
     "lite-server": "^2.5.4"
