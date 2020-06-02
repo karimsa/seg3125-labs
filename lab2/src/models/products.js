@@ -61,6 +61,7 @@ const productCollection = [
 		keywords: ['milk'],
 		category: ProductCategories.Dairy,
 		imageURL: imgNeilson4L,
+		imageType: 'height',
 		price: {
 			amount: 3.99,
 			type: 'bag',
@@ -82,6 +83,7 @@ const productCollection = [
 		keywords: ['condiments'],
 		category: ProductCategories.Pantry,
 		imageURL: imgHeinzKetchup,
+		imageType: 'height',
 		price: {
 			amount: 1.99,
 			type: 'bottle',
@@ -92,6 +94,7 @@ const productCollection = [
 		name: 'Arm & Hammer - Baking Soda (454g)',
 		category: ProductCategories.Pantry,
 		imageURL: imgBakingSoda,
+		imageType: 'height',
 		price: {
 			amount: 1.99,
 			type: 'box',

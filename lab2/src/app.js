@@ -43,8 +43,9 @@ function BestSellersList({ numProducts, openProductModal }) {
 			onClick=${() => openProductModal(products[currentProductIndex])}
 			style="
 				background-image: url(${currentProduct.imageURL});
-				background-size: cover;
 				background-position: center center;
+				background-repeat: no-repeat;
+				background-size: ${currentProduct.imageType === 'height' ? 'auto 100%' : 'cover'};
 			"
 		>
 			<div className="my-5 py-4" />
