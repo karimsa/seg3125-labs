@@ -73,4 +73,14 @@ export const Products = {
 			data: Object.keys(ProductCategories),
 		}
 	},
+
+	findById(id) {
+		return productCollection.find(product => product.id === id)
+	},
+
+	useFindById(id) {
+		return useMemo(() => ({
+			data: this.findById(id),
+		}), [id])
+	},
 }

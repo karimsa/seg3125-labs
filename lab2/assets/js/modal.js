@@ -19,10 +19,10 @@ export function useModal() {
 	]
 }
 
-export function Modal({ modalRef, className = '', children }) {
+export function Modal({ modalRef, size, className = '', children }) {
 	return html`
 		<div className="modal fade" tabindex="-1" role="dialog" ref=${modalRef}>
-			<div className="modal-dialog">
+			<div className="modal-dialog ${size ? 'modal-' + size : ''}">
 				<div className="modal-content">
 					<div className="modal-body ${className}">
 						${children}
