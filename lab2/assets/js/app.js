@@ -107,11 +107,17 @@ function ShoppingCartMenuItem({ quantity, productID, openProductModal }) {
 
 	return html`
 		<li className="dropdown-item">
-			<a href="#" className="dropdown-link" onClick=${evt => {
-				evt.preventDefault()
-				openProductModal(product)
-			}}>
-				<span className="badge badge-pill badge-secondary mr-2">${quantity}</span>
+			<a
+				href="#"
+				className="dropdown-link"
+				onClick=${(evt) => {
+					evt.preventDefault()
+					openProductModal(product)
+				}}
+			>
+				<span className="badge badge-pill badge-secondary mr-2"
+					>${quantity}</span
+				>
 				<span>${product.name}</span>
 			</a>
 		</li>
@@ -139,15 +145,18 @@ function ShoppingCartMenu({ openProductModal }) {
 
 			<div className="dropdown-menu dropdown-menu-right" id="cart">
 				${currentUser.activeCart.length === 0
-					? html`<li className="text-muted px-3 text-center">Your cart is empty.</li>` :
-					currentUser.activeCart.map(entry => html`
-						<${ShoppingCartMenuItem}
-							quantity=${entry.quantity}
-							productID=${entry.productID}
-							openProductModal=${openProductModal}
-						/>
-					`)
-				}
+					? html`<li className="text-muted px-3 text-center">
+							Your cart is empty.
+					  </li>`
+					: currentUser.activeCart.map(
+							(entry) => html`
+								<${ShoppingCartMenuItem}
+									quantity=${entry.quantity}
+									productID=${entry.productID}
+									openProductModal=${openProductModal}
+								/>
+							`,
+					  )}
 			</div>
 		</li>
 	`

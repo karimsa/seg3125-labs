@@ -75,12 +75,15 @@ export const Products = {
 	},
 
 	findById(id) {
-		return productCollection.find(product => product.id === id)
+		return productCollection.find((product) => product.id === id)
 	},
 
 	useFindById(id) {
-		return useMemo(() => ({
-			data: this.findById(id),
-		}), [id])
+		return useMemo(
+			() => ({
+				data: this.findById(id),
+			}),
+			[id],
+		)
 	},
 }

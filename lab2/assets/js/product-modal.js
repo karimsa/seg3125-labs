@@ -9,19 +9,25 @@ import { Users } from './models/users.js'
 
 export function ProductModal({ product, modalRef }) {
 	const { data: currentUser, mutate: updateUser } = Users.useCurrentUser()
-	const cartEntry = currentUser.activeCart.find(entry => entry.productID === product.id)
+	const cartEntry = currentUser.activeCart.find(
+		(entry) => entry.productID === product.id,
+	)
 	const [quantity, setQuantity] = useState(() => {
 		return cartEntry ? cartEntry.quantity : 0
 	})
 
-	const cartItem = currentUser.activeCart.find(({ productID }) => productID === product.id)
+	const cartItem = currentUser.activeCart.find(
+		({ productID }) => productID === product.id,
+	)
 
 	function updateQuantity(quantity) {
 		if (quantity > 0) {
 			updateUser({
 				...currentUser,
 				activeCart: [
-					...currentUser.activeCart.filter(entry => entry.productID !== cartEntry.productID),
+					...currentUser.activeCart.filter(
+						(entry) => entry.productID !== cartEntry.productID,
+					),
 					{
 						productID: cartEntry.productID,
 						quantity,
@@ -31,7 +37,9 @@ export function ProductModal({ product, modalRef }) {
 		} else {
 			updateUser({
 				...currentUser,
-				activeCart: currentUser.activeCart.filter(entry => entry.productID !== cartEntry.productID),
+				activeCart: currentUser.activeCart.filter(
+					(entry) => entry.productID !== cartEntry.productID,
+				),
 			})
 		}
 	}
@@ -48,7 +56,7 @@ export function ProductModal({ product, modalRef }) {
 							<h5>${product.name}</h5>
 							<p>${product.price.amount} per ${product.price.type}</p>
 
-							<form className="row" onSubmit=${evt => {
+							<form className="row" onSubmit=${(evt) => {
 								evt.preventDefault()
 								updateUser({
 									...currentUser,
@@ -76,22 +84,22 @@ export function ProductModal({ product, modalRef }) {
 									${
 										cartItem
 											? html`
-												<div className="btn-group">
-													<button
-														type="button"
-														className="btn btn-primary"
-														onClick=${() => updateQuantity(quantity)}
-													>
-														Update cart
-													</button>
-													<button
-														type="button"
-														className="btn btn-danger"
-														onClick=${() => updateQuantity(0)}
-													>
-														Remove from cart
-													</button>
-												</div>
+													<div className="btn-group">
+														<button
+															type="button"
+															className="btn btn-primary"
+															onClick=${() => updateQuantity(quantity)}
+														>
+															Update cart
+														</button>
+														<button
+															type="button"
+															className="btn btn-danger"
+															onClick=${() => updateQuantity(0)}
+														>
+															Remove from cart
+														</button>
+													</div>
 											  `
 											: html`<button
 													type="submit"
@@ -103,7 +111,13 @@ export function ProductModal({ product, modalRef }) {
 									}
 								</div>
 							</form>
-							${cartEntry && html`<p className="font-weight-normal small mt-2">There are currently ${cartEntry.quantity} of these in your cart.</p>`}
+							${
+								cartEntry &&
+								html`<p className="font-weight-normal small mt-2">
+									There are currently ${cartEntry.quantity} of these in your
+									cart.
+								</p>`
+							}
 						</div>
 					</div>
 				</div>
