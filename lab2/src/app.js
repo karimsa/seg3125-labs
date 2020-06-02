@@ -53,7 +53,7 @@ function BestSellersList({ numProducts, openProductModal }) {
 			className="d-flex align-items-center justify-content-between w-100 px-2"
 		>
 			<p className="small font-weight-bold text-right mt-2 mb-0">
-				${currentProduct.name} / $${currentProduct.price.amount} per
+				${currentProduct.name} / $${currentProduct.price.amount} per${' '}
 				${currentProduct.price.type}
 			</p>
 			<div>
@@ -119,11 +119,15 @@ function ShoppingCartMenuItem({ quantity, productID, openProductModal }) {
 		>
 			<div className="d-flex">
 				<div className="col pl-0">
-					<span className="badge badge-pill badge-secondary mr-2">${quantity}</span>
+					<span className="badge badge-pill badge-secondary mr-2"
+						>${quantity}</span
+					>
 					<span>${product.name}</span>
 				</div>
 				<div className="col text-right pr-0">
-					<span className="ml-4">$${rounded(quantity * product.price.amount)}</span>
+					<span className="ml-4"
+						>$${rounded(quantity * product.price.amount)}</span
+					>
 				</div>
 			</div>
 		</li>
@@ -332,10 +336,18 @@ function App() {
 			${
 				query
 					? html`
-							<p className="font-weight-${searchResults.results.length === 0 ? 'bold' : 'normal'}">
+							<p
+								className="font-weight-${searchResults.results.length === 0
+									? 'bold'
+									: 'normal'}"
+							>
 								Found ${searchResults.results.length} of${' '}
 								${searchResults.totalDocs} matches.
-								${searchResults.totalHidden > 0 && html`<span className="text-muted ml-1">(${searchResults.totalHidden} hidden results to match your dietary preferences.)</span>`}
+								${searchResults.totalHidden > 0 &&
+								html`<span className="text-muted ml-1"
+									>(${searchResults.totalHidden} hidden results to match your
+									dietary preferences.)</span
+								>`}
 							</p>
 
 							${searchResults.results.map(

@@ -16,11 +16,11 @@ import imgCategoryPantry from '../images/category-pantry.jpg'
 import imgCategoryDairy from '../images/category-dairy.jpg'
 
 const ProductCategories = Object.freeze({
-	Fruits: {label:'Fruits',image:imgCategoryFruits},
-	Vegetables: {label:'Vegetables',image:imgCategoryVegetables},
-	Meat: {label:'Meat',image:imgCategoryMeat},
-	Pantry: {label:'Pantry',image:imgCategoryPantry},
-	Dairy: {label:'Dairy',image:imgCategoryDairy},
+	Fruits: { label: 'Fruits', image: imgCategoryFruits },
+	Vegetables: { label: 'Vegetables', image: imgCategoryVegetables },
+	Meat: { label: 'Meat', image: imgCategoryMeat },
+	Pantry: { label: 'Pantry', image: imgCategoryPantry },
+	Dairy: { label: 'Dairy', image: imgCategoryDairy },
 })
 
 const productCollection = [
@@ -145,7 +145,10 @@ export const Products = {
 
 		let totalHidden = 0
 		const results = productCollection.filter((product) => {
-			const match = (product.name.match(pttn) || product.category.label.match(pttn) || (product.keywords && product.keywords.find(key => key.match(pttn))))
+			const match =
+				product.name.match(pttn) ||
+				product.category.label.match(pttn) ||
+				(product.keywords && product.keywords.find((key) => key.match(pttn)))
 			const allowed = currentUser.diet[product.category.label] !== false
 
 			if (match && !allowed) {

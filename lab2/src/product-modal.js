@@ -1,8 +1,4 @@
-import {
-	html,
-	useEffect,
-	useState,
-} from 'htm/preact/standalone.module.js'
+import { html, useEffect, useState } from 'htm/preact/standalone.module.js'
 
 import { Modal, useModal } from './modal.js'
 import { Users } from './models/users.js'
@@ -128,10 +124,10 @@ export function ProductQuantityForm({ product }) {
 		${cartEntry &&
 		html`<p className="font-weight-normal small mt-2 mb-0">
 			There is currently${' '}
-			${cartEntry.quantity}${product.price.type === 'g' || product.price.type === 'kg' ? '' : ' '}${pluralize(
-				cartEntry.quantity,
-				product.price.type,
-			)}${' '}
+			${cartEntry.quantity}${product.price.type === 'g' ||
+			product.price.type === 'kg'
+				? ''
+				: ' '}${pluralize(cartEntry.quantity, product.price.type)}${' '}
 			of this item in your cart for a total of${' '}
 			$${rounded(cartEntry.quantity * product.price.amount)}.
 		</p>`}
