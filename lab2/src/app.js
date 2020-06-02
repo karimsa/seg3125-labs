@@ -79,6 +79,7 @@ function BestSellersList({ numProducts, openProductModal }) {
 }
 
 function CategoryGallery() {
+	const { data: currentUser } = Users.useCurrentUser()
 	const { data: categories } = Products.useProductCategories()
 
 	return html`
@@ -86,7 +87,7 @@ function CategoryGallery() {
 
 		<div class="row">
 			${categories.map(
-				(category) => html`
+				(category) => currentUser.diet[category.label] !== false && html`
 					<div class="col-6 clickable">
 						<div
 							className="card"
