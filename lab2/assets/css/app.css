@@ -1,0 +1,27 @@
+.navbar-light.bg-light {
+	background-color: #fff !important;
+}
+
+.navbar-brand, p, .nav-link, .btn {
+	font-weight: bold;
+}
+
+.rounded-lg.form-control {
+	border-radius: 2rem !important;
+}
+
+.btn, .clickable {
+	cursor: pointer;
+}
+
+.btn:hover,
+.clickable:hover {
+	transform: scale(1.1);
+}
+
+.btn,
+.btn:hover,
+.clickable,
+.clickable:hover {
+	transition: .3s transform ease;
+}
