@@ -78,7 +78,7 @@ function BestSellersList({ numProducts, openProductModal }) {
 	`
 }
 
-function CategoryGallery() {
+function CategoryGallery({ setQuery }) {
 	const { data: currentUser } = Users.useCurrentUser()
 	const { data: categories } = Products.useProductCategories()
 
@@ -88,7 +88,7 @@ function CategoryGallery() {
 		<div class="row">
 			${categories.map(
 				(category) => currentUser.diet[category.label] !== false && html`
-					<div class="col-6 clickable">
+					<div class="col-6 clickable" onClick=${() => setQuery(category.label)}>
 						<div
 							className="card"
 							style="
@@ -371,7 +371,7 @@ function App() {
 
 							<div className="row pb-4 mb-5">
 								<div className="col">
-									<${CategoryGallery} openProductModal=${openProductModal} />
+									<${CategoryGallery} setQuery=${setQuery} openProductModal=${openProductModal} />
 								</div>
 							</div>
 					  `
