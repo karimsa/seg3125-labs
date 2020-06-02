@@ -1,7 +1,7 @@
 {
   "scripts": {
     "lint": "prettier --write lab*/assets/**/**.{css,js,html}",
-    "build": "for i in lab*; do cd $i; npm run build; cd ..; done"
+	"build": "for i in lab*; do cd $i; npm run build; cd ..; done"
   },
   "devDependencies": {
     "lite-server": "^2.5.4",
