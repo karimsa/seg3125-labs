@@ -22,6 +22,7 @@ import imgCategoryBakery from '../images/category-bakery.jpg'
 import imgChocLavaCake from '../images/chocolate-lava-cake.jpg'
 import imgDempstersWhiteBread from '../images/dempsters-white-bread.png'
 import imgDempstersWhiteBreadGlutenFree from '../images/dempsters-white-bread-gluten-free.jpg'
+import imgOrganicRoyalGala from '../images/organic-royal-gala.jpg'
 
 const ProductCategories = Object.freeze({
 	Fruits: { label: 'Fruits', image: imgCategoryFruits },
@@ -45,6 +46,18 @@ const productCollection = [
 	},
 	{
 		id: null,
+		name: 'Royal gala apples (Organic)',
+		keywords: ['organic'],
+		category: ProductCategories.Fruits,
+		imageURL: imgOrganicRoyalGala,
+		price: {
+			amount: 1.49,
+			type: 'apple',
+		},
+		isOrganic: true,
+	},
+	{
+		id: null,
 		name: 'AAA Steak',
 		keywords: ['beef'],
 		category: ProductCategories.Meat,
@@ -56,13 +69,15 @@ const productCollection = [
 	},
 	{
 		id: null,
-		name: 'Asparagus',
+		name: 'Asparagus (Organic)',
+		keywords: ['organic'],
 		category: ProductCategories.Vegetables,
 		imageURL: imgAsparagus,
 		price: {
 			amount: 4.99,
 			type: 'g',
 		},
+		isOrganic: true,
 	},
 	{
 		id: null,
@@ -78,13 +93,15 @@ const productCollection = [
 	},
 	{
 		id: null,
-		name: 'Eggs (1 dozen)',
+		name: 'Eggs (1 dozen) (Organic)',
+		keywords: ['organic'],
 		category: ProductCategories.Dairy,
 		imageURL: imgEggsDozen,
 		price: {
 			amount: 7.99,
 			type: 'dozen',
 		},
+		isOrganic: true,
 	},
 	{
 		id: null,
@@ -133,17 +150,20 @@ const productCollection = [
 	},
 	{
 		id: null,
-		name: 'Eggplants',
+		name: 'Eggplants (Organic)',
+		keywords: ['organic'],
 		category: ProductCategories.Vegetables,
 		imageURL: imgEggplant,
 		price: {
 			amount: 3.99,
 			type: 'box',
 		},
+		isOrganic: true,
 	},
 	{
 		id: null,
 		name: 'Chicken',
+		keywords: ['breast'],
 		category: ProductCategories.Meat,
 		imageURL: imgChicken,
 		price: {
@@ -165,6 +185,7 @@ const productCollection = [
 	{
 		id: null,
 		name: 'Dempsters White Bread',
+		keywords: ['slice'],
 		category: ProductCategories.Bakery,
 		imageURL: imgDempstersWhiteBread,
 		price: {
@@ -176,6 +197,7 @@ const productCollection = [
 	{
 		id: null,
 		name: 'Dempsters White Bread (Gluten free)',
+		keywords: ['slice', 'gluten-free'],
 		category: ProductCategories.Bakery,
 		imageURL: imgDempstersWhiteBreadGlutenFree,
 		price: {
@@ -230,6 +252,11 @@ export const DietaryRestrictions = {
 			ProductCategories.Meat,
 			ProductCategories.Dairy,
 		]),
+	},
+	organic: {
+		label: 'Only organic products',
+		keep: product => product.isOrganic,
+		hiddenCategories: new Set(),
 	},
 }
 
