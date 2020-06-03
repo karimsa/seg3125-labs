@@ -214,14 +214,22 @@ export const DietaryRestrictions = {
 	glutenFree: {
 		label: 'Gluten free',
 		keep: product => !product.hasGluten,
+		hiddenCategories: new Set(),
 	},
 	vegetarian: {
 		label: 'Vegetarian (hide meat)',
 		keep: product => product.category !== ProductCategories.Meat,
+		hiddenCategories: new Set([
+			ProductCategories.Meat,
+		]),
 	},
 	vegan: {
 		label: 'Vegan (hide meat & dairy)',
 		keep: product => product.category !== ProductCategories.Meat && product.category !== ProductCategories.Dairy,
+		hiddenCategories: new Set([
+			ProductCategories.Meat,
+			ProductCategories.Dairy,
+		]),
 	},
 }
 
@@ -262,9 +270,25 @@ export const Products = {
 	},
 
 	useProductCategories() {
-		return {
-			data: Object.values(ProductCategories),
-		}
+		const { data: currentUser } = Users.useCurrentUser()
+		return useMemo(() => {
+			return {
+				data: Object.values(ProductCategories).filter(category => {
+					for (const key in DietaryRestrictions) {
+						// If the user's dietary restrictions forbids the entire category,
+						// hide it in this hook
+						if (
+							DietaryRestrictions.hasOwnProperty(key) &&
+							currentUser.diet[key] === true &&
+							DietaryRestrictions[key].hiddenCategories.has(category)
+						) {
+							return false
+						}
+					}
+					return true
+				}),
+			}
+		}, [currentUser.diet])
 	},
 
 	useSearch({ query, order }) {
