@@ -8,7 +8,6 @@ export const Users = {
 				...store,
 				currentUser: {
 					id: 0,
-					name: 'Jane Smith',
 					diet: {},
 					activeCart: [],
 				},

@@ -10,7 +10,7 @@ import {
 } from 'htm/preact/standalone.module.js'
 
 import { Users } from './models/users.js'
-import { Products, rounded, SortFunctions } from './models/products.js'
+import { Products, rounded, SortFunctions, DietaryRestrictions } from './models/products.js'
 import { Modal, useModal } from './modal.js'
 import { StoreProvider } from './store.js'
 import { useProductModal, ProductQuantityForm } from './product-modal.js'
@@ -80,7 +80,6 @@ function BestSellersList({ numProducts, openProductModal }) {
 }
 
 function CategoryGallery({ setQuery }) {
-	const { data: currentUser } = Users.useCurrentUser()
 	const { data: categories } = Products.useProductCategories()
 
 	return html`
@@ -89,7 +88,6 @@ function CategoryGallery({ setQuery }) {
 		<div class="row">
 			${categories.map(
 				(category) =>
-					currentUser.diet[category.label] !== false &&
 					html`
 						<div
 							class="col-6 clickable"
@@ -288,32 +286,30 @@ function App() {
 
 			<form className="mx-auto">
 				<div className="form-group">
-					<label className="font-weight-bold">What items are you able to eat?</label>
+					<label className="font-weight-bold">Dietary Restrictions</label>
 					<div className="col">
-						${categories.map(
-							(category) => html`
-								<div
-									className="form-check cursor-pointer"
-									onClick=${() =>
-										updateUser({
-											...currentUser,
-											diet: {
-												...currentUser.diet,
-												[category.label]: !currentUser.diet[category.label],
-											},
-										})}
-								>
-									<input
-										className="form-check-input"
-										type="checkbox"
-										checked=${currentUser.diet[category.label] !== false}
-									/>
-									<label className="form-check-label cursor-pointer">
-										${category.label}
-									</label>
-								</div>
-							`,
-						)}
+						${Object.keys(DietaryRestrictions).map(key => html`
+							<div
+								className="form-check cursor-pointer"
+								onClick=${() =>
+									updateUser({
+										...currentUser,
+										diet: {
+											...currentUser.diet,
+											[key]: !currentUser.diet[key],
+										},
+									})}
+							>
+								<input
+									className="form-check-input"
+									type="checkbox"
+									checked=${currentUser.diet[key] === true}
+								/>
+								<label className="form-check-label cursor-pointer">
+									${DietaryRestrictions[key].label}
+								</label>
+							</div>
+						`)}
 					</div>
 				</div>
 			</form>

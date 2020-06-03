@@ -18,6 +18,10 @@ import imgMustard from '../images/mustard.jpg'
 import imgOranges from '../images/oranges.jpg'
 import imgEggplant from '../images/eggplant.jpg'
 import imgChicken from '../images/chicken.jpg'
+import imgCategoryBakery from '../images/category-bakery.jpg'
+import imgChocLavaCake from '../images/chocolate-lava-cake.jpg'
+import imgDempstersWhiteBread from '../images/dempsters-white-bread.png'
+import imgDempstersWhiteBreadGlutenFree from '../images/dempsters-white-bread-gluten-free.jpg'
 
 const ProductCategories = Object.freeze({
 	Fruits: { label: 'Fruits', image: imgCategoryFruits },
@@ -25,11 +29,12 @@ const ProductCategories = Object.freeze({
 	Meat: { label: 'Meat', image: imgCategoryMeat },
 	Pantry: { label: 'Pantry', image: imgCategoryPantry },
 	Dairy: { label: 'Dairy', image: imgCategoryDairy },
+	Bakery: { label: 'Bakery', image: imgCategoryBakery },
 })
 
 const productCollection = [
 	{
-		id: 0,
+		id: null,
 		name: 'Apples',
 		category: ProductCategories.Fruits,
 		imageURL: imgApple,
@@ -39,7 +44,7 @@ const productCollection = [
 		},
 	},
 	{
-		id: 1,
+		id: null,
 		name: 'AAA Steak',
 		keywords: ['beef'],
 		category: ProductCategories.Meat,
@@ -50,7 +55,7 @@ const productCollection = [
 		},
 	},
 	{
-		id: 2,
+		id: null,
 		name: 'Asparagus',
 		category: ProductCategories.Vegetables,
 		imageURL: imgAsparagus,
@@ -60,7 +65,7 @@ const productCollection = [
 		},
 	},
 	{
-		id: 3,
+		id: null,
 		name: 'Neilson 2% (4L)',
 		keywords: ['milk'],
 		category: ProductCategories.Dairy,
@@ -72,7 +77,7 @@ const productCollection = [
 		},
 	},
 	{
-		id: 4,
+		id: null,
 		name: 'Eggs (1 dozen)',
 		category: ProductCategories.Dairy,
 		imageURL: imgEggsDozen,
@@ -82,7 +87,7 @@ const productCollection = [
 		},
 	},
 	{
-		id: 5,
+		id: null,
 		name: 'Heinz Ketchup (397g)',
 		keywords: ['condiments'],
 		category: ProductCategories.Pantry,
@@ -94,7 +99,7 @@ const productCollection = [
 		},
 	},
 	{
-		id: 6,
+		id: null,
 		name: 'Arm & Hammer - Baking Soda (454g)',
 		category: ProductCategories.Pantry,
 		imageURL: imgBakingSoda,
@@ -105,7 +110,7 @@ const productCollection = [
 		},
 	},
 	{
-		id: 7,
+		id: null,
 		name: 'Mustard',
 		keywords: ['condiments'],
 		category: ProductCategories.Pantry,
@@ -117,7 +122,7 @@ const productCollection = [
 		},
 	},
 	{
-		id: 8,
+		id: null,
 		name: 'Oranges',
 		category: ProductCategories.Fruits,
 		imageURL: imgOranges,
@@ -127,7 +132,7 @@ const productCollection = [
 		},
 	},
 	{
-		id: 9,
+		id: null,
 		name: 'Eggplants',
 		category: ProductCategories.Vegetables,
 		imageURL: imgEggplant,
@@ -137,7 +142,7 @@ const productCollection = [
 		},
 	},
 	{
-		id: 10,
+		id: null,
 		name: 'Chicken',
 		category: ProductCategories.Meat,
 		imageURL: imgChicken,
@@ -146,7 +151,43 @@ const productCollection = [
 			type: 'tray',
 		},
 	},
-]
+	{
+		id: null,
+		name: 'Chocolate Lava Cake',
+		category: ProductCategories.Bakery,
+		imageURL: imgChocLavaCake,
+		price: {
+			amount: 19.99,
+			type: 'each',
+		},
+		hasGluten: true,
+	},
+	{
+		id: null,
+		name: 'Dempsters White Bread',
+		category: ProductCategories.Bakery,
+		imageURL: imgDempstersWhiteBread,
+		price: {
+			amount: 2.99,
+			type: 'loaf',
+		},
+		hasGluten: true,
+	},
+	{
+		id: null,
+		name: 'Dempsters White Bread (Gluten free)',
+		category: ProductCategories.Bakery,
+		imageURL: imgDempstersWhiteBreadGlutenFree,
+		price: {
+			amount: 3.99,
+			type: 'loaf',
+		},
+	},
+].map((product, index) => {
+	// AutoId
+	product.id = index
+	return product
+})
 
 // Let's preload the images for perf
 productCollection.forEach(({ imageURL }) => {
@@ -169,6 +210,33 @@ export const SortFunctions = {
 	},
 }
 
+export const DietaryRestrictions = {
+	glutenFree: {
+		label: 'Gluten free',
+		keep: product => !product.hasGluten,
+	},
+	vegetarian: {
+		label: 'Vegetarian (hide meat)',
+		keep: product => product.category !== ProductCategories.Meat,
+	},
+	vegan: {
+		label: 'Vegan (hide meat & dairy)',
+		keep: product => product.category !== ProductCategories.Meat && product.category !== ProductCategories.Dairy,
+	},
+}
+
+function userCanEat(user, product) {
+	for (const key in DietaryRestrictions) {
+		if (DietaryRestrictions.hasOwnProperty(key) && user.diet[key] === true) {
+			const { keep } = DietaryRestrictions[key]
+			if (!keep(product)) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 export const Products = {
 	usePreviewProducts({ numProducts }) {
 		const { data: currentUser } = Users.useCurrentUser()
@@ -177,7 +245,7 @@ export const Products = {
 				const results = []
 				for (const product of productCollection) {
 					if (
-						currentUser.diet[product.category.label] !== false &&
+						userCanEat(currentUser, product) &&
 						results.push(product) === numProducts
 					) {
 						break
@@ -212,8 +280,8 @@ export const Products = {
 					product.name.match(pttn) ||
 					product.category.label.match(pttn) ||
 					(product.keywords && product.keywords.find((key) => key.match(pttn)))
-				const allowed = currentUser.diet[product.category.label] !== false
-	
+				const allowed = userCanEat(currentUser, product)
+		
 				if (match && !allowed) {
 					totalHidden++
 				}
@@ -227,7 +295,7 @@ export const Products = {
 					totalHidden,
 				},
 			}
-		}, [query, order])
+		}, [query, order, currentUser.diet])
 	},
 
 	findById(id) {
