@@ -14,6 +14,10 @@ import imgCategoryVegetables from '../images/category-vegetables.jpg'
 import imgCategoryMeat from '../images/category-meat.jpg'
 import imgCategoryPantry from '../images/category-pantry.jpg'
 import imgCategoryDairy from '../images/category-dairy.jpg'
+import imgMustard from '../images/mustard.jpg'
+import imgOranges from '../images/oranges.jpg'
+import imgEggplant from '../images/eggplant.jpg'
+import imgChicken from '../images/chicken.jpg'
 
 const ProductCategories = Object.freeze({
 	Fruits: { label: 'Fruits', image: imgCategoryFruits },
@@ -98,6 +102,48 @@ const productCollection = [
 		price: {
 			amount: 1.99,
 			type: 'box',
+		},
+	},
+	{
+		id: 7,
+		name: 'Mustard',
+		keywords: ['condiments'],
+		category: ProductCategories.Pantry,
+		imageURL: imgMustard,
+		imageType: 'height',
+		price: {
+			amount: 1.99,
+			type: 'bottle',
+		},
+	},
+	{
+		id: 8,
+		name: 'Oranges',
+		category: ProductCategories.Fruits,
+		imageURL: imgOranges,
+		price: {
+			amount: 3.99,
+			type: 'box',
+		},
+	},
+	{
+		id: 9,
+		name: 'Eggplants',
+		category: ProductCategories.Vegetables,
+		imageURL: imgEggplant,
+		price: {
+			amount: 3.99,
+			type: 'box',
+		},
+	},
+	{
+		id: 10,
+		name: 'Chicken',
+		category: ProductCategories.Meat,
+		imageURL: imgChicken,
+		price: {
+			amount: 10.99,
+			type: 'tray',
 		},
 	},
 ]

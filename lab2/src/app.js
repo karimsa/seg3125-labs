@@ -218,7 +218,7 @@ function ShoppingCartMenu({ openProductModal }) {
 
 function ProductSearchResult({ product }) {
 	return html`
-		<div className="card">
+		<div className="card mb-4">
 			<div className="card-body row">
 				<div className="col-2">
 					<img src="${product.imageURL}" className="img-fluid" />
@@ -348,8 +348,7 @@ function App() {
 									? 'bold'
 									: 'normal'}"
 							>
-								Found ${searchResults.results.length} of${' '}
-								${searchResults.totalDocs} matches.
+								Found ${searchResults.results.length} matches.
 								${searchResults.totalHidden > 0 &&
 								html`<span className="text-muted ml-1"
 									>(${searchResults.totalHidden} hidden results to match your
