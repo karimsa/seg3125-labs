@@ -23,6 +23,7 @@ import imgChocLavaCake from '../images/chocolate-lava-cake.jpg'
 import imgDempstersWhiteBread from '../images/dempsters-white-bread.png'
 import imgDempstersWhiteBreadGlutenFree from '../images/dempsters-white-bread-gluten-free.jpg'
 import imgOrganicRoyalGala from '../images/organic-royal-gala.jpg'
+import imgKraftDinner from '../images/kraft-dinner.jpg'
 
 const ProductCategories = Object.freeze({
 	Fruits: { label: 'Fruits', image: imgCategoryFruits },
@@ -90,6 +91,7 @@ const productCollection = [
 			amount: 3.99,
 			type: 'bag',
 		},
+		hasLactose: true,
 	},
 	{
 		id: null,
@@ -102,6 +104,7 @@ const productCollection = [
 			type: 'dozen',
 		},
 		isOrganic: true,
+		hasLactose: true,
 	},
 	{
 		id: null,
@@ -181,6 +184,7 @@ const productCollection = [
 			type: 'each',
 		},
 		hasGluten: true,
+		hasLactose: true,
 	},
 	{
 		id: null,
@@ -204,6 +208,19 @@ const productCollection = [
 			amount: 3.99,
 			type: 'loaf',
 		},
+	},
+	{
+		id: null,
+		name: 'Kraft Dinner',
+		keywords: ['mac', 'cheese'],
+		category: ProductCategories.Pantry,
+		imageURL: imgKraftDinner,
+		price: {
+			amount: 0.99,
+			type: 'box',
+		},
+		hasGluten: true,
+		hasLactose: true,
 	},
 ].map((product, index) => {
 	// AutoId
@@ -257,6 +274,13 @@ export const DietaryRestrictions = {
 		label: 'Only organic products',
 		keep: product => product.isOrganic,
 		hiddenCategories: new Set(),
+	},
+	lactose: {
+		label: 'Lactose intolerant',
+		keep: product => !product.hasLactose,
+		hiddenCategories: new Set([
+			ProductCategories.Dairy,
+		]),
 	},
 }
 
