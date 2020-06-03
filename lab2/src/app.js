@@ -10,7 +10,7 @@ import {
 } from 'htm/preact/standalone.module.js'
 
 import { Users } from './models/users.js'
-import { Products, rounded } from './models/products.js'
+import { Products, rounded, SortFunctions } from './models/products.js'
 import { Modal, useModal } from './modal.js'
 import { StoreProvider } from './store.js'
 import { useProductModal, ProductQuantityForm } from './product-modal.js'
@@ -250,9 +250,11 @@ function App() {
 
 	const [settingsRef, { openModal: openSettingsModal }] = useModal()
 	const [{ openProductModal }, productModal] = useProductModal()
+	const [searchOrder, setSearchOrder] = useState('price-low-to-high')
 	const [query, setQuery] = useQueryParam('query')
 	const { data: searchResults } = Products.useSearch({
 		query,
+		order: searchOrder,
 	})
 
 	const browseDropdownRef = useRef()
@@ -343,18 +345,38 @@ function App() {
 			${
 				query.trim()
 					? html`
-							<p
-								className="font-weight-${searchResults.results.length === 0
-									? 'bold'
-									: 'normal'}"
-							>
-								Found ${searchResults.results.length} matches.
-								${searchResults.totalHidden > 0 &&
-								html`<span className="text-muted ml-1"
-									>(${searchResults.totalHidden} hidden results to match your
-									dietary preferences.)</span
-								>`}
-							</p>
+							<div className="row align-items-center mb-4">
+								<div className="col">
+									<p
+										className="mb-0 font-weight-${searchResults.results.length === 0
+											? 'bold'
+											: 'normal'}"
+									>
+										Found ${searchResults.results.length} matches.
+										${searchResults.totalHidden > 0 &&
+										html`<span className="text-muted ml-1"
+											>(${searchResults.totalHidden} hidden results to match your
+											dietary preferences.)</span
+										>`}
+									</p>
+								</div>
+								<div className="col-auto">
+									<div className="row">
+										<label className="col-form-label">Sort by:</label>
+										<div className="col">
+											<select
+												className="form-control"
+												value=${searchOrder}
+												onChange=${evt => setSearchOrder(evt.target.value)}
+											>
+												${Object.keys(SortFunctions).map(value => html`
+													<option value=${value}>${SortFunctions[value].label}</option>
+												`)}
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
 
 							${searchResults.results.map(
 								(product) =>

@@ -158,6 +158,17 @@ export function rounded(num) {
 	return num.toFixed(2)
 }
 
+export const SortFunctions = {
+	'price-low-to-high': {
+		label: 'Price (low to high)',
+		sort: (prodA, prodB) => prodA.price.amount - prodB.price.amount,
+	},
+	'price-high-to-low': {
+		label: 'Price (high to low)',
+		sort: (prodA, prodB) => prodB.price.amount - prodA.price.amount,
+	},
+}
+
 export const Products = {
 	usePreviewProducts({ numProducts }) {
 		const { data: currentUser } = Users.useCurrentUser()
@@ -188,31 +199,35 @@ export const Products = {
 		}
 	},
 
-	useSearch({ query }) {
+	useSearch({ query, order }) {
 		const { data: currentUser } = Users.useCurrentUser()
-		const pttn = new RegExp(query, 'i')
 
-		let totalHidden = 0
-		const results = productCollection.filter((product) => {
-			const match =
-				product.name.match(pttn) ||
-				product.category.label.match(pttn) ||
-				(product.keywords && product.keywords.find((key) => key.match(pttn)))
-			const allowed = currentUser.diet[product.category.label] !== false
-
-			if (match && !allowed) {
-				totalHidden++
+		return useMemo(() => {
+			const pttn = new RegExp(query, 'i')
+			const sorter = (SortFunctions[order] || SortFunctions["price-high-to-low"]).sort
+	
+			let totalHidden = 0
+			const results = productCollection.filter((product) => {
+				const match =
+					product.name.match(pttn) ||
+					product.category.label.match(pttn) ||
+					(product.keywords && product.keywords.find((key) => key.match(pttn)))
+				const allowed = currentUser.diet[product.category.label] !== false
+	
+				if (match && !allowed) {
+					totalHidden++
+				}
+				return match && allowed
+			})
+	
+			return {
+				data: {
+					results: results.sort(sorter),
+					totalDocs: productCollection.length,
+					totalHidden,
+				},
 			}
-			return match && allowed
-		})
-
-		return {
-			data: {
-				results,
-				totalDocs: productCollection.length,
-				totalHidden,
-			},
-		}
+		}, [query, order])
 	},
 
 	findById(id) {
