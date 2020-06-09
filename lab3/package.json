@@ -1,0 +1,13 @@
+{
+	"scripts": {
+		"start": "../node_modules/.bin/parcel serve --port 3000 src/index.html",
+		"build": "../node_modules/.bin/parcel build --no-content-hash --no-source-maps --public-url /lab2/ src/index.html -d ."
+	},
+	"dependencies": {
+		"@fortawesome/fontawesome-free": "^5.13.0",
+		"bootstrap": "^4.5.0",
+		"htm": "^3.0.4",
+		"jquery": "^3.5.1",
+		"popper.js": "^1.16.1"
+	}
+}
