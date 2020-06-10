@@ -295,6 +295,15 @@ function userCanEat(user, product) {
 	return true
 }
 
+function patternMatch(string, patterns) {
+	for (const pttn of patterns) {
+		if (string.match(pttn)) {
+			return true
+		}
+	}
+	return false
+}
+
 export const Products = {
 	usePreviewProducts({ numProducts }) {
 		const { data: currentUser } = Users.useCurrentUser()
@@ -345,15 +354,17 @@ export const Products = {
 		const { data: currentUser } = Users.useCurrentUser()
 
 		return useMemo(() => {
-			const pttn = new RegExp(query, 'i')
+			const patterns = query.split(/[^a-zA-Z0-9]+/g).map(word => {
+				return new RegExp(word, 'i')
+			})
 			const sorter = (SortFunctions[order] || SortFunctions["price-high-to-low"]).sort
-	
+
 			let totalHidden = 0
 			const results = productCollection.filter((product) => {
 				const match =
-					product.name.match(pttn) ||
-					product.category.label.match(pttn) ||
-					(product.keywords && product.keywords.find((key) => key.match(pttn)))
+					patternMatch(product.name, patterns) ||
+					patternMatch(product.category.label, patterns) ||
+					(product.keywords && product.keywords.find((key) => patternMatch(key, patterns)))
 				const allowed = userCanEat(currentUser, product)
 		
 				if (match && !allowed) {
