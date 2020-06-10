@@ -1,37 +1,17 @@
 import $ from 'jquery'
 import { useMemo } from 'htm/preact/standalone.module.js'
 
+import { Images } from './images.js'
 import { Users } from './users.js'
-import imgApple from '../images/apples.jpg'
-import imgSteak from '../images/steak.jpg'
-import imgAsparagus from '../images/asparagus.jpg'
-import imgNeilson4L from '../images/neilson-4l-2p.jpg'
-import imgEggsDozen from '../images/eggs-1-dozen.jpg'
-import imgHeinzKetchup from '../images/heinz-ketchup.jpg'
-import imgBakingSoda from '../images/arm-baking-soda.jpg'
-import imgCategoryFruits from '../images/category-fruits.jpg'
-import imgCategoryVegetables from '../images/category-vegetables.jpg'
-import imgCategoryMeat from '../images/category-meat.jpg'
-import imgCategoryPantry from '../images/category-pantry.jpg'
-import imgCategoryDairy from '../images/category-dairy.jpg'
-import imgMustard from '../images/mustard.jpg'
-import imgOranges from '../images/oranges.jpg'
-import imgEggplant from '../images/eggplant.jpg'
-import imgChicken from '../images/chicken.jpg'
-import imgCategoryBakery from '../images/category-bakery.jpg'
-import imgChocLavaCake from '../images/chocolate-lava-cake.jpg'
-import imgDempstersWhiteBread from '../images/dempsters-white-bread.png'
-import imgDempstersWhiteBreadGlutenFree from '../images/dempsters-white-bread-gluten-free.jpg'
-import imgOrganicRoyalGala from '../images/organic-royal-gala.jpg'
-import imgKraftDinner from '../images/kraft-dinner.jpg'
 
 const ProductCategories = Object.freeze({
-	Fruits: { label: 'Fruits', image: imgCategoryFruits },
-	Vegetables: { label: 'Vegetables', image: imgCategoryVegetables },
-	Meat: { label: 'Meat', image: imgCategoryMeat },
-	Pantry: { label: 'Pantry', image: imgCategoryPantry },
-	Dairy: { label: 'Dairy', image: imgCategoryDairy },
-	Bakery: { label: 'Bakery', image: imgCategoryBakery },
+	Fruits: { label: 'Fruits', image: Images.create('6iYs78oCiZA') },
+	Vegetables: { label: 'Vegetables', image: Images.create('s285sDw5Ikc') },
+	Meat: { label: 'Meat', image: Images.create('UC0HZdUitWY') },
+	Seafood: { label: 'Seafood', image: Images.create('3cjbDO3QJJo') },
+	Pantry: { label: 'Pantry', image: Images.create('_Bhh-RCciio') },
+	Dairy: { label: 'Dairy', image: Images.create('_8bnn1GqX70') },
+	Bakery: { label: 'Bakery', image: Images.create('R1ql7fk3I1Y') },
 })
 
 const productCollection = [
@@ -39,7 +19,7 @@ const productCollection = [
 		id: null,
 		name: 'Apples',
 		category: ProductCategories.Fruits,
-		imageURL: imgApple,
+		imageURL: Images.create('I58f47LRQYM'),
 		price: {
 			amount: 0.99,
 			type: 'apple',
@@ -50,7 +30,7 @@ const productCollection = [
 		name: 'Royal gala apples (Organic)',
 		keywords: ['organic'],
 		category: ProductCategories.Fruits,
-		imageURL: imgOrganicRoyalGala,
+		imageURL: Images.create('HfRpk5l943s'),
 		price: {
 			amount: 1.49,
 			type: 'apple',
@@ -62,7 +42,7 @@ const productCollection = [
 		name: 'AAA Steak',
 		keywords: ['beef'],
 		category: ProductCategories.Meat,
-		imageURL: imgSteak,
+		imageURL: Images.create('J88no2vCrTs'),
 		price: {
 			amount: 10.99,
 			type: 'kg',
@@ -73,7 +53,7 @@ const productCollection = [
 		name: 'Asparagus (Organic)',
 		keywords: ['organic'],
 		category: ProductCategories.Vegetables,
-		imageURL: imgAsparagus,
+		imageURL: Images.create('ReXxkS1m1H0'),
 		price: {
 			amount: 4.99,
 			type: 'g',
@@ -82,23 +62,24 @@ const productCollection = [
 	},
 	{
 		id: null,
-		name: 'Neilson 2% (4L)',
+		name: 'itambe milk (1L)',
 		keywords: ['milk'],
 		category: ProductCategories.Dairy,
-		imageURL: imgNeilson4L,
+		imageURL: Images.create('I58f47LRQYM'),
 		imageType: 'height',
 		price: {
 			amount: 3.99,
-			type: 'bag',
+			type: 'carton',
 		},
 		hasLactose: true,
+		isOrganic: true,
 	},
 	{
 		id: null,
 		name: 'Eggs (1 dozen) (Organic)',
 		keywords: ['organic'],
 		category: ProductCategories.Dairy,
-		imageURL: imgEggsDozen,
+		imageURL: Images.create('Hj53USePB1E'),
 		price: {
 			amount: 7.99,
 			type: 'dozen',
@@ -111,7 +92,7 @@ const productCollection = [
 		name: 'Heinz Ketchup (397g)',
 		keywords: ['condiments'],
 		category: ProductCategories.Pantry,
-		imageURL: imgHeinzKetchup,
+		imageURL: Images.create('b8jHMJOzso8'),
 		imageType: 'height',
 		price: {
 			amount: 1.99,
@@ -120,21 +101,21 @@ const productCollection = [
 	},
 	{
 		id: null,
-		name: 'Arm & Hammer - Baking Soda (454g)',
+		name: 'Caraway seeds',
 		category: ProductCategories.Pantry,
-		imageURL: imgBakingSoda,
+		imageURL: Images.create('eGWEnG-v0nA'),
 		imageType: 'height',
 		price: {
-			amount: 1.99,
-			type: 'box',
+			amount: 0.99,
+			type: 'lb',
 		},
-	},
+	}, 
 	{
 		id: null,
 		name: 'Mustard',
 		keywords: ['condiments'],
 		category: ProductCategories.Pantry,
-		imageURL: imgMustard,
+		imageURL: Images.create('LBPpGIKzXok'),
 		imageType: 'height',
 		price: {
 			amount: 1.99,
@@ -145,7 +126,7 @@ const productCollection = [
 		id: null,
 		name: 'Oranges',
 		category: ProductCategories.Fruits,
-		imageURL: imgOranges,
+		imageURL: Images.create('MRnV51_Yqqk'),
 		price: {
 			amount: 3.99,
 			type: 'box',
@@ -156,7 +137,7 @@ const productCollection = [
 		name: 'Eggplants (Organic)',
 		keywords: ['organic'],
 		category: ProductCategories.Vegetables,
-		imageURL: imgEggplant,
+		imageURL: Images.create('YF8cn3GDDC0'),
 		price: {
 			amount: 3.99,
 			type: 'box',
@@ -165,20 +146,20 @@ const productCollection = [
 	},
 	{
 		id: null,
-		name: 'Chicken',
-		keywords: ['breast'],
+		name: '10pc Chicken Wings',
 		category: ProductCategories.Meat,
-		imageURL: imgChicken,
+		imageURL: Images.create('NbXjZomyNEM'),
 		price: {
 			amount: 10.99,
-			type: 'tray',
+			type: '10pc',
 		},
 	},
 	{
 		id: null,
 		name: 'Chocolate Lava Cake',
+		keywords: ['dessert', 'treat', 'sweet'],
 		category: ProductCategories.Bakery,
-		imageURL: imgChocLavaCake,
+		imageURL: Images.create('W1TOhhlbQpw'),
 		price: {
 			amount: 19.99,
 			type: 'each',
@@ -188,25 +169,25 @@ const productCollection = [
 	},
 	{
 		id: null,
-		name: 'Dempsters White Bread',
-		keywords: ['slice'],
+		name: 'Fresh baked buns (gluten free)',
+		keywords: ['bread', 'gluten-free'],
 		category: ProductCategories.Bakery,
-		imageURL: imgDempstersWhiteBread,
+		imageURL: Images.create('IUk1S6n2s0o'),
 		price: {
 			amount: 2.99,
-			type: 'loaf',
+			type: 'roll',
 		},
-		hasGluten: true,
+		hasGluten: false,
 	},
 	{
 		id: null,
-		name: 'Dempsters White Bread (Gluten free)',
-		keywords: ['slice', 'gluten-free'],
+		name: 'Coffee cake',
+		keywords: ['dessert', 'sweet', 'treat'],
 		category: ProductCategories.Bakery,
-		imageURL: imgDempstersWhiteBreadGlutenFree,
+		imageURL: Images.create('HDi8KXLm6kg'),
 		price: {
 			amount: 3.99,
-			type: 'loaf',
+			type: 'cake',
 		},
 	},
 	{
@@ -214,13 +195,24 @@ const productCollection = [
 		name: 'Kraft Dinner',
 		keywords: ['mac', 'cheese'],
 		category: ProductCategories.Pantry,
-		imageURL: imgKraftDinner,
+		imageURL: Images.create('tf2dNkqagyc'),
 		price: {
 			amount: 0.99,
 			type: 'box',
 		},
 		hasGluten: true,
 		hasLactose: true,
+	},
+	{
+		id: null,
+		name: 'Jumbo Shrimp',
+		keywords: ['prawn'],
+		category: ProductCategories.Seafood,
+		imageURL: Images.create('3cjbDO3QJJo'),
+		price: {
+			amount: 19.99,
+			type: 'kg',
+		},
 	},
 ].map((product, index) => {
 	// AutoId
@@ -280,6 +272,13 @@ export const DietaryRestrictions = {
 		keep: product => !product.hasLactose,
 		hiddenCategories: new Set([
 			ProductCategories.Dairy,
+		]),
+	},
+	nofish: {
+		label: 'Hide fish and seafood items',
+		keep: product => product.category !== ProductCategories.Seafood,
+		hiddenCategories: new Set([
+			ProductCategories.Seafood,
 		]),
 	},
 }

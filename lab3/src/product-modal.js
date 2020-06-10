@@ -4,6 +4,7 @@ import { html, useEffect, useState } from 'htm/preact/standalone.module.js'
 import { Modal, useModal } from './modal.js'
 import { Users } from './models/users.js'
 import { rounded } from './models/products.js'
+import { Images } from './models/images.js'
 
 function pluralize(num, unit) {
 	if (num === 1) {
@@ -137,10 +138,12 @@ export function ProductQuantityForm({ product }) {
 }
 
 export function ProductModal({ product, modalRef }) {
+	const { data: imageURL } = Images.useURL(product.imageURL)
+
 	return html`
 			<${Modal} className="p-0 d-flex flex-row" size="xl" modalRef=${modalRef}>
 				<img
-					src=${product.imageURL}
+					src=${imageURL}
 					className="w-50"
 				/>
 				<div className="w-50 p-4 d-flex align-items-center">

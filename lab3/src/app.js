@@ -15,6 +15,8 @@ import { Modal, useModal } from './modal.js'
 import { StoreProvider } from './store.js'
 import { useProductModal, ProductQuantityForm } from './product-modal.js'
 import { useQueryParam } from './hooks.js'
+import { Images } from './models/images.js'
+import { useCitationsModal } from './citations.js'
 
 function BestSellersList({ numProducts, openProductModal }) {
 	const { data: products } = Products.usePreviewProducts({
@@ -34,6 +36,7 @@ function BestSellersList({ numProducts, openProductModal }) {
 	}, [currentProductIndex])
 
 	const currentProduct = products[currentProductIndex]
+	const { data: imageURL } = Images.useURL(currentProduct.imageURL)
 
 	return html`
 		<p>Best sellers</p>
@@ -42,7 +45,7 @@ function BestSellersList({ numProducts, openProductModal }) {
 			className="card py-5 clickable"
 			onClick=${() => openProductModal(products[currentProductIndex])}
 			style="
-				background-image: url(${currentProduct.imageURL});
+				background-image: url(${imageURL});
 				background-position: center center;
 				background-repeat: no-repeat;
 				background-size: ${currentProduct.imageType === 'height' ? 'auto 100%' : 'cover'};
@@ -79,6 +82,29 @@ function BestSellersList({ numProducts, openProductModal }) {
 	`
 }
 
+function CategoryGalleryItem({ category, setQuery }) {
+	const { data: image } = Images.useURL(category.image)
+
+	return html`
+		<div
+			class="col-6 clickable"
+			onClick=${() => setQuery(category.label)}
+		>
+			<div
+				className="card"
+				style="
+					background-image: url(${image});
+					background-size: cover;
+					background-position: center center;
+				"
+			>
+				<div className="card-body py-5 my-4"></div>
+			</div>
+			<p className="small font-weight-bold">${category.label}</p>
+		</div>
+	`
+}
+
 function CategoryGallery({ setQuery }) {
 	const { data: categories } = Products.useProductCategories()
 
@@ -88,24 +114,7 @@ function CategoryGallery({ setQuery }) {
 		<div class="row">
 			${categories.map(
 				(category) =>
-					html`
-						<div
-							class="col-6 clickable"
-							onClick=${() => setQuery(category.label)}
-						>
-							<div
-								className="card"
-								style="
-						background-image: url(${category.image});
-						background-size: cover;
-						background-position: center center;
-					"
-							>
-								<div className="card-body py-5 my-4"></div>
-							</div>
-							<p className="small font-weight-bold">${category.label}</p>
-						</div>
-					`,
+					html`<${CategoryGalleryItem} setQuery=${setQuery} category=${category} />`,
 			)}
 		</div>
 	`
@@ -215,11 +224,13 @@ function ShoppingCartMenu({ openProductModal }) {
 }
 
 function ProductSearchResult({ product }) {
+	const { data: source } = Images.useURL(product.imageURL)
+
 	return html`
 		<div className="card mb-4">
 			<div className="card-body row">
 				<div className="col-2">
-					<img src="${product.imageURL}" className="img-fluid" />
+					<img src="${source}" className="img-fluid" />
 				</div>
 				<div className="col d-flex align-items-center">
 					<div className="row w-100">
@@ -241,18 +252,17 @@ function ProductSearchResult({ product }) {
 
 function App() {
 	const { data: currentUser, mutate: updateUser } = Users.useCurrentUser()
-	const { data: categories } = Products.useProductCategories()
 	const { data: bestSellers } = Products.usePreviewProducts({
 		numProducts: 3,
 	})
 
 	const [settingsRef, { openModal: openSettingsModal }] = useModal()
 	const [{ openProductModal }, productModal] = useProductModal()
-	const [searchOrder, setSearchOrder] = useState('price-low-to-high')
+	const [{ openCitationsModal }, citationsModal] = useCitationsModal()
 	const [query, setQuery] = useQueryParam('query')
 	const { data: searchResults } = Products.useSearch({
 		query,
-		order: searchOrder,
+		order: currentUser.searchOrder,
 	})
 
 	const browseDropdownRef = useRef()
@@ -362,8 +372,11 @@ function App() {
 										<div className="col">
 											<select
 												className="form-control"
-												value=${searchOrder}
-												onChange=${evt => setSearchOrder(evt.target.value)}
+												value=${currentUser.searchOrder}
+												onChange=${evt => updateUser({
+													...currentUser,
+													searchOrder: evt.target.value,
+												})}
 											>
 												${Object.keys(SortFunctions).map(value => html`
 													<option value=${value}>${SortFunctions[value].label}</option>
@@ -404,11 +417,17 @@ function App() {
 			}
 		</div>
 
+		${citationsModal}
+
 		<footer className="container py-4 mt-5">
 			<div className="row">
 				<div className="col text-center">
 					<p className="mb-0">Website designed & built by <a href="https://alibhai.co" rel="noreferrer noopener" target="_blank">Karim Alibhai</a></p>
 					<p className="mb-0">Built using Bootstrap, Preact, htm, and lots of other great technologies.</p>
+					<p className="mb-0">See <a href="#" onClick=${evt => {
+						evt.preventDefault()
+						openCitationsModal()
+					}}>works cited</a>.</p>
 				</div>
 			</div>
 		</footer>
