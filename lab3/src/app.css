@@ -1,3 +1,9 @@
+html,
+body,
+#app {
+	height: 100%;
+}
+
 body {
 	background-color: #edf2f9;
 }

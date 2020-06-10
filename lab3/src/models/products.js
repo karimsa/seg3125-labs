@@ -222,7 +222,7 @@ const productCollection = [
 
 // Let's preload the images for perf
 productCollection.forEach(({ imageURL }) => {
-	$(`<img src="${imageURL}" class="d-none" />`).appendTo(document.body)
+	$(`<img src="${Images.useURL(imageURL).data}" class="d-none" />`).appendTo(document.body)
 })
 
 export function rounded(num) {
