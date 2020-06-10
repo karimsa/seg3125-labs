@@ -43,9 +43,38 @@ export function Onboarding() {
 		}
 	}, [step])
 
+	const [numImagesLoaded, setImagesLoaded] = useState(0)
+	const [error, setError] = useState()
+	useEffect(() => {
+		for (const { image } of onboardingSteps) {
+			const img = new Image()
+			img.onload = function() {
+				setImagesLoaded(i => i + 1)
+			}
+			img.onerror = function() {
+				if (img.src.endsWith('?retry')) {
+					setError(`Failed to load onboarding wizard. Please try again later.`)
+				} else {
+					// One more try
+					img.src += `?retry`
+				}
+			}
+			img.src = image
+		}
+	}, [])
+
 	const currentStep = onboardingSteps[step]
 
-	if (!currentStep) {
+	if (error) {
+		return html`
+			<div className="h-100 d-flex align-items-center justify-content-center">
+				<div className="alert alert-danger">
+					${String(error)}
+				</div>
+			</div>
+		`
+	}
+	if (!currentStep || numImagesLoaded < onboardingSteps.length) {
 		return html`
 			<div className="h-100 d-flex align-items-center justify-content-center">
 				<div className="spinner-border text-primary" role="status">
