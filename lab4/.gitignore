@@ -1,0 +1,5 @@
+*.html
+!src/*.html
+assets
+dist
+
