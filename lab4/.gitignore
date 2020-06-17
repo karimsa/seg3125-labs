@@ -1,5 +1,5 @@
 *.html
 !src/*.html
 assets
-dist
+!dist
 
