@@ -1,7 +1,7 @@
 {
   "scripts": {
-	"start": "lite-server",
-	"build": "echo nothing to build"
+    "start": "lite-server",
+    "build": "cp -R . ../dist/lab1"
   },
   "devDependencies": {
     "lite-server": "^2.5.4"
