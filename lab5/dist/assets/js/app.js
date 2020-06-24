@@ -54,11 +54,13 @@ window.jQuery(function($) {
                     target
                         .removeClass('is-valid')
                         .removeClass('is-invalid')
+                        .removeAttr('title')
                         .tooltip('dispose')
                 } else if (isValid) {
                     target
                         .addClass('is-valid')
                         .removeClass('is-invalid')
+                        .removeAttr('title')
                         .tooltip('dispose')
                 } else {
                     target
