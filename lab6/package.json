@@ -1,5 +1,8 @@
 {
-  "devDependencies": {
-    "@karimsa/mono": "^0.1.0"
-  }
+	"scripts": {
+		"build": "echo nothing to do"
+	},
+	"devDependencies": {
+		"@karimsa/mono": "^0.1.0"
+	}
 }
