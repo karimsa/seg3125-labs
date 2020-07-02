@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bootstrap Documentation Feedback</title>
+
+	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+	<div class="container my-4" id="app">
+		<div class="row">
+			<div class="col d-flex align-items-center justify-content-center">
+				<div>
+					<h2 class="text-center my-4">Bootstrap Docs • Feedback Form</h2>
+
+					<div id="preview">
+						<a href="https://getbootstrap.com" target="_blank" rel="noreferrer noopener">
+							<img src="./images/preview-0.png" class="lift img-fluid" />
+						</a>
+					</div>
+					<div class="d-flex" id="gallery">
+						<img src="./images/preview-0.png" class="flex-grow-1 img-fluid lift active" />
+						<img src="./images/preview-1.png" class="flex-grow-1 img-fluid lift" />
+						<img src="./images/preview-2.png" class="flex-grow-1 img-fluid lift" />
+						<img src="./images/preview-3.png" class="flex-grow-1 img-fluid lift" />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row my-5">
+			<div class="col my-5">
+				<hr />
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col d-flex align-items-center justify-content-center">
+				<form>
+					<div class="form-group mb-5 mt-0">
+						<h3 class="text-center">
+							Thanks for taking the time to provide us feedback! Your answers on this form help
+							us improve our documentation for other developers.
+						</h3>
+					</div>
+
+					<div class="form-group d-none mb-0" id="error-group">
+						<div class="alert alert-danger mb-0"></div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-form-label">What should we call you?</label>
+						<input type="text" placeholder="i.e. Jane Smith" class="form-control" name="fullName" required />
+					</div>
+
+					<div class="form-group">
+						<label class="col-form-label">Overall, how useful did you find the website to learn how Bootstrap works?</label>
+
+						<div class="d-flex" style="margin-top: 3rem; ">
+							<div class="flex-grow-1 d-flex align-items-center justify-content-center">
+								<div>
+									<input type="radio" name="usefulness" style="margin-bottom: 1rem; " value="0" required>
+									<p class="text-center">0</p>
+									<p class="text-center">not useful at all</p>
+								</div>
+							</div>
+							<div class="flex-grow-1 d-flex align-items-center justify-content-center">
+								<div>
+									<input type="radio" name="usefulness" style="margin-bottom: 1rem; " value="1" required>
+									<p class="text-center">1</p>
+									<p class="hidden">you can't see me</p>
+								</div>
+							</div>
+							<div class="flex-grow-1 d-flex align-items-center justify-content-center">
+								<div>
+									<input type="radio" name="usefulness" style="margin-bottom: 1rem; " value="2" required>
+									<p class="text-center">2</p>
+									<p class="hidden">you can't see me</p>
+								</div>
+							</div>
+							<div class="flex-grow-1 d-flex align-items-center justify-content-center">
+								<div>
+									<input type="radio" name="usefulness" style="margin-bottom: 1rem; " value="3" required>
+									<p class="text-center">3</p>
+									<p class="hidden">you can't see me</p>
+								</div>
+							</div>
+							<div class="flex-grow-1 d-flex align-items-center justify-content-center">
+								<div>
+									<input type="radio" name="usefulness" style="margin-bottom: 1rem; " value="4" required>
+									<p class="text-center">4</p>
+									<p class="hidden">you can't see me</p>
+								</div>
+							</div>
+							<div class="flex-grow-1 d-flex align-items-center justify-content-center">
+								<div>
+									<input type="radio" name="usefulness" style="margin-bottom: 1rem; " value="5" required>
+									<p class="text-center">5</p>
+									<p class="text-center">the most useful thing ever</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-form-label">What component do you love the most?</label>
+
+						<div class="position-relative">
+							<select class="custom-select form-control" name="favComponent" required>
+								<option value="grid">Grid components (row, col)</option>
+								<option value="typography">Typography</option>
+								<option value="buttons">Buttons</option>
+								<option value="alerts">Alerts</option>
+								<option value="modals">Modals</option>
+								<option value="none">None of the above</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-form-label">Select the Bootstrap features that you wish you had more exposure to</label>
+
+						<div class="position-relative">
+							<select class="custom-select form-control" name="featuresForMoreExposure" multiple required>
+								<option value="bundling-with-bootstrap">Bundling with Bootstrap</option>
+								<option value="code-splitting">Code splitting</option>
+								<option value="icons">Bootrap Icons</option>
+								<option value="expo">Bootrap Expo</option>
+								<option value="themes">Bootrap Themes</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-form-label">Please indicate how much you rely on the following features in production</label>
+
+						<div class="position-relative">
+							<table class="w-100">
+								<thead>
+									<tr>
+										<th></th>
+										<th>I desperately need this</th>
+										<th>I use this, but have alternatives</th>
+										<th>I've never used this</th>
+									</tr>
+								</thead>
+								<tbody id="likert-body">
+									<tr>
+										<td>Tooltips</td>
+										<td>
+											<input type="radio" name="tooltips-reliance" value="desperately-need" required="">
+										</td>
+										<td>
+											<input type="radio" name="tooltips-reliance" value="alternatives-exist" required="">
+										</td>
+										<td>
+											<input type="radio" name="tooltips-reliance" value="never-used" required="">
+										</td>
+									</tr>
+								
+									<tr>
+										<td>Modals</td>
+										<td>
+											<input type="radio" name="modals-reliance" value="desperately-need" required="">
+										</td>
+										<td>
+											<input type="radio" name="modals-reliance" value="alternatives-exist" required="">
+										</td>
+										<td>
+											<input type="radio" name="modals-reliance" value="never-used" required="">
+										</td>
+									</tr>
+								
+									<tr>
+										<td>Form validation</td>
+										<td>
+											<input type="radio" name="form-validation-reliance" value="desperately-need" required="">
+										</td>
+										<td>
+											<input type="radio" name="form-validation-reliance" value="alternatives-exist" required="">
+										</td>
+										<td>
+											<input type="radio" name="form-validation-reliance" value="never-used" required="">
+										</td>
+									</tr>
+								
+									<tr>
+										<td>Popovers</td>
+										<td>
+											<input type="radio" name="popovers-reliance" value="desperately-need" required="">
+										</td>
+										<td>
+											<input type="radio" name="popovers-reliance" value="alternatives-exist" required="">
+										</td>
+										<td>
+											<input type="radio" name="popovers-reliance" value="never-used" required="">
+										</td>
+									</tr>
+								
+									<tr>
+										<td>Progress</td>
+										<td>
+											<input type="radio" name="progress-bar-reliance" value="desperately-need" required="">
+										</td>
+										<td>
+											<input type="radio" name="progress-bar-reliance" value="alternatives-exist" required="">
+										</td>
+										<td>
+											<input type="radio" name="progress-bar-reliance" value="never-used" required="">
+										</td>
+									</tr>
+
+									<tr>
+										<td>Scrollspy</td>
+										<td>
+											<input type="radio" name="scrollspy-reliance" value="desperately-need" required="">
+										</td>
+										<td>
+											<input type="radio" name="scrollspy-reliance" value="alternatives-exist" required="">
+										</td>
+										<td>
+											<input type="radio" name="scrollspy-reliance" value="never-used" required="">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-form-label">Do you have any suggestions for how we can improve?</label>
+
+						<div class="position-relative">
+							<textarea
+								class="form-control"
+								rows="5"
+								cols="10"
+								placeholder="All feedback helps!"
+								name="suggestions"
+							></textarea>
+						</div>
+					</div>
+
+					<div class="form-group text-center">
+						<button
+							type="submit"
+							class="btn btn-primary btn-lg lift"
+						>Submit answers</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<footer>
+		<p class="text-center">Website designed by <a href="https://alibhai.co" target="_blank" rel="noreferrer noopener">Karim Alibhai</a>.</p>
+	</footer>
+	
+	<script src="./app.js"></script>
+</body>
+</html>
