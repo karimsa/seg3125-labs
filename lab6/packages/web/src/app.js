@@ -1,6 +1,6 @@
 import $ from 'jquery'
 import 'bootstrap'
-import '@babel/polyfill'
+import 'regenerator-runtime/runtime'
 
 import { axios } from './axios'
 

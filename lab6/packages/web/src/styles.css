@@ -87,7 +87,13 @@ table tbody > tr:nth-of-type(2n + 1) {
 	background-color: #0cac8e;
 }
 
-footer a {
+.progress {
+	height: 2.5rem;
+	font-size: 1.25rem;
+	font-weight: 300;
+}
+
+a.link {
 	color: #084bb5;
 	text-decoration: none;
 	border-bottom: dotted 2px;

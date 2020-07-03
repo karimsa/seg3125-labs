@@ -26,6 +26,9 @@ class DataStore {
 		this.data.push(row)
 		return fs.promises.writeFile(dbPath, JSON.stringify(this.data, null, '\t') + '\n')
 	}
+	find() {
+		return this.data.slice()
+	}
 }
 
 const db = new DataStore()

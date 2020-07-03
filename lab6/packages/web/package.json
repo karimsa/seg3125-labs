@@ -4,11 +4,17 @@
 		"build": "parcel build src/index.html"
 	},
 	"devDependencies": {
-		"parcel": "^1.12.4"
+		"parcel": "^2.0.0-beta.1"
 	},
 	"dependencies": {
+		"@babel/polyfill": "^7.10.4",
+		"@fortawesome/fontawesome-free": "^5.13.1",
 		"bootstrap": "^4.5.0",
 		"jquery": "^3.5.1",
-		"popper.js": "^1.16.1"
+		"popper.js": "^1.16.1",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"regenerator-runtime": "^0.13.5",
+		"swr": "^0.2.3"
 	}
 }
