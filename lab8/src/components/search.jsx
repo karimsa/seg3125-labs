@@ -60,7 +60,7 @@ function VehicleMarker({ vehicle, onClick }) {
 		<img
 			src={vehicle.imageURL}
 			css={css`
-				height: 3rem;
+				height: ${vehicle.imageWidth}rem;
 				width: auto;
 			`}
 			onClick={onClick}
@@ -148,6 +148,8 @@ export function Search() {
 		<div className="container-fluid flex-grow-1 d-flex justify-content-center px-0">
 			<div className="row flex-grow-1 no-gutters">
 				<div className="col-3 bg-white p-3">
+					<p className="font-weight-bold mb-3">Search for vehicles</p>
+
 					<form
 						onSubmit={(evt) => {
 							evt.preventDefault()
@@ -177,6 +179,7 @@ export function Search() {
 
 						<div className="form-group">
 							<label htmlFor="carType" className="col-form-label">
+								<i className="mr-2 fas fa-car-side" />
 								Vehicle type
 							</label>
 							<select
@@ -193,6 +196,7 @@ export function Search() {
 
 						<div className="form-group">
 							<label htmlFor="priceRange" className="col-form-label">
+								<i className="mr-2 fas fa-dollar-sign" />
 								Price range
 							</label>
 							<div className="input-group" id="priceRange">

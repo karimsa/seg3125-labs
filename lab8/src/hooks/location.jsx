@@ -9,6 +9,7 @@ const vehicleTemplates = [
 	{
 		id: 0,
 		imageURL: imgHyundaiSonata2019,
+		imageWidth: 3,
 		type: 'sedan',
 		location: {
 			lat: 0,
@@ -22,6 +23,7 @@ const vehicleTemplates = [
 	{
 		id: 1,
 		imageURL: imgHyundaiSonata2019,
+		imageWidth: 3,
 		type: 'sedan',
 		location: {
 			lat: 0,
@@ -35,6 +37,7 @@ const vehicleTemplates = [
 	{
 		id: 2,
 		imageURL: imgHyundaiSonata2019,
+		imageWidth: 3,
 		type: 'sedan',
 		location: {
 			lat: 0.009,
@@ -48,6 +51,7 @@ const vehicleTemplates = [
 	{
 		id: 3,
 		imageURL: imgHyundaiSonata2019,
+		imageWidth: 3,
 		type: 'sedan',
 		location: {
 			lat: 0.019,
@@ -61,6 +65,7 @@ const vehicleTemplates = [
 	{
 		id: 4,
 		imageURL: imgHondaCRV2015Maroon,
+		imageWidth: 4,
 		type: 'suv',
 		location: {
 			lat: 0,
@@ -74,6 +79,7 @@ const vehicleTemplates = [
 	{
 		id: 5,
 		imageURL: imgHondaCRV2015Maroon,
+		imageWidth: 4,
 		type: 'suv',
 		location: {
 			lat: 0,
@@ -87,6 +93,7 @@ const vehicleTemplates = [
 	{
 		id: 6,
 		imageURL: imgHondaCRV2015Maroon,
+		imageWidth: 4,
 		type: 'suv',
 		location: {
 			lat: 0.019,
