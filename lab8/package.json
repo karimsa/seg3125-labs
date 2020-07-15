@@ -1,0 +1,36 @@
+{
+    "private": true,
+    "name": "seg3125-lab8",
+    "version": "0.0.0",
+    "scripts": {
+        "start": "parcel serve --https --port 3000 src/index.html",
+        "build": "parcel build --no-content-hash --no-source-maps --public-url /lab8/ src/index.html -d ../dist/lab8"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.10.5",
+        "@babel/preset-react": "^7.10.4",
+        "babel-eslint": "^10.1.0",
+        "babel-plugin-transform-inline-environment-variables": "^0.4.3",
+        "eslint": "^7.4.0",
+        "eslint-plugin-import": "^2.22.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-react": "^7.20.3",
+        "eslint-plugin-standard": "^4.0.1",
+        "parcel": "^1.12.4",
+        "prettier": "^2.0.5"
+    },
+    "dependencies": {
+        "@emotion/core": "^10.0.28",
+        "@fortawesome/fontawesome-free": "^5.13.1",
+        "bootstrap": "^4.5.0",
+        "google-map-react": "^1.1.7",
+        "jquery": "^3.5.1",
+        "popper.js": "^1.16.1",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "react-router-dom": "^5.2.0",
+        "swr": "^0.2.3"
+    }
+}

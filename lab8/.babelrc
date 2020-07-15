@@ -1,0 +1,14 @@
+{
+	"plugins": [
+		"babel-plugin-emotion",
+		"babel-plugin-transform-inline-environment-variables"
+	],
+	"presets": [
+		"@babel/preset-react",
+		["@babel/preset-env", {
+			"targets": {
+				"browser": "> 1%"
+			}
+		}]
+	]
+}
