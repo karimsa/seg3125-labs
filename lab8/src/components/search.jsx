@@ -1,11 +1,54 @@
-import React, { useState, useEffect } from 'react'
+/** @jsx jsx */
+
+import { useState, useEffect } from 'react'
 import GoogleMapReact from 'google-map-react'
 import useSWR from 'swr'
+import { jsx, css } from '@emotion/core'
 
 import { useCurrentLocation } from '../hooks/location'
 import { useLocalValue } from '../hooks/local-storage'
+import { Vehicles } from '../models/vehicles'
+import { useAsyncAction } from '../hooks/state'
 
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY
+
+function resolveAddress(google, address) {
+	return new Promise((resolve, reject) => {
+		if (google && address) {
+			google.geocoder.geocode({ address }, (res, status) => {
+				if (status === 'OK') {
+					resolve(res[0].geometry.location)
+				} else {
+					reject(new Error(`Failed to resolve address: ${address}`))
+				}
+			})
+		} else {
+			reject(new Error(`API has not loaded yet`))
+		}
+	})
+}
+
+function searchVehicles(carType, min, max) {
+	return Vehicles.search({
+		carType,
+		price: {
+			min,
+			max,
+		},
+	})
+}
+
+function VehicleMarker({ vehicle }) {
+	return (
+		<div
+			css={css`
+				width: 1rem;
+				height: 1rem;
+				background: #000;
+			`}
+		></div>
+	)
+}
 
 export function Search() {
 	const currentLocationState = useCurrentLocation()
@@ -15,25 +58,19 @@ export function Search() {
 	const [google, setMapsAPI] = useState()
 
 	// Search parameters
-	const [address, setAddress] = useState('')
-	const addressCoords = useSWR([address], (address) => {
-		return new Promise((resolve, reject) => {
-			if (google && address) {
-				google.geocoder.geocode({ address }, (res, status) => {
-					if (status === 'OK') {
-						resolve(res[0].geometry.location)
-					} else {
-						reject(new Error(`Failed to resolve address: ${address}`))
-					}
-				})
-			}
-		})
-	})
+	const [address, setAddress] = useLocalValue('address', '')
 	const [carType, setCarType] = useLocalValue('car-type', 'all')
 	const [priceRange, setPriceRange] = useLocalValue('price-range', {
 		min: 0,
 		max: 100,
 	})
+
+	// Search
+	const [addressCoords, { fetch: fetchSearch }] = useAsyncAction(resolveAddress)
+	const searchState = useSWR(
+		[carType, priceRange.min, priceRange.max],
+		searchVehicles,
+	)
 
 	useEffect(() => {
 		if (currentLocationState.data && !mapCenter) {
@@ -41,12 +78,14 @@ export function Search() {
 		}
 	}, [currentLocationState.data])
 	useEffect(() => {
-		if (addressCoords.data) {
-			console.warn(addressCoords.data)
+		if (google && address && !addressCoords.data) {
+			fetchSearch(google, address)
 		}
-	}, [addressCoords.data])
+	}, [google, address, addressCoords.data])
 
-	const error = currentLocationState.error || addressCoords.error
+	const error = currentLocationState.error
+	const nonFatalErr = searchState.error || addressCoords.error
+	const isLoading = searchState.isValidating
 
 	if (error) {
 		return (
@@ -80,8 +119,21 @@ export function Search() {
 		<div className="container-fluid flex-grow-1 d-flex justify-content-center px-0">
 			<div className="row flex-grow-1 no-gutters">
 				<div className="col-3 bg-white p-3">
-					<form>
-						<div className="form-group">
+					<form
+						onSubmit={(evt) => {
+							evt.preventDefault()
+							fetchSearch(google, address)
+						}}
+					>
+						{nonFatalErr && (
+							<div className="form-group">
+								<div className="alert alert-danger" role="alert">
+									{String(nonFatalErr.message || nonFatalErr)}
+								</div>
+							</div>
+						)}
+
+						<div className="form-group d-none">
 							<label htmlFor="" className="col-form-label">
 								Location
 							</label>
@@ -153,7 +205,11 @@ export function Search() {
 						</div>
 
 						<div className="form-group text-center">
-							<button type="submit" className="btn btn-primary">
+							<button
+								type="submit"
+								className="btn btn-primary"
+								disabled={isLoading}
+							>
 								<i className="mr-2 fas fa-search" />
 								Search
 							</button>
@@ -173,7 +229,17 @@ export function Search() {
 						onGoogleApiLoaded={({ map, maps }) => {
 							setMapsAPI({ map, maps, geocoder: new maps.Geocoder() })
 						}}
-					/>
+					>
+						{searchState.data &&
+							searchState.data.map((vehicle) => (
+								<VehicleMarker
+									key={vehicle.id}
+									vehicle={vehicle}
+									lat={vehicle.location.lat}
+									lng={vehicle.location.lng}
+								/>
+							))}
+					</GoogleMapReact>
 				</div>
 			</div>
 		</div>

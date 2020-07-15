@@ -11,7 +11,7 @@ export function Navbar() {
 				background-color: var(--primary) !important;
 			`}
 		>
-			<div className="container">
+			<div className="container-fluid">
 				<Link to="/" className="navbar-brand">
 					Dash
 				</Link>
