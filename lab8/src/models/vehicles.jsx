@@ -1,6 +1,9 @@
+import imgHyundaiSonata2019 from '../images/hyundai-sonata-2019-white.png'
+
 const VEHICLES = [
 	{
 		id: 0,
+		imageURL: imgHyundaiSonata2019,
 		type: 'sedan',
 		location: {
 			lat: 43.194852977801446,

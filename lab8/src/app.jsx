@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap'
 import 'regenerator-runtime/runtime'
 import React from 'react'
 import { render } from 'react-dom'

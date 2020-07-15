@@ -1,14 +1,18 @@
 /** @jsx jsx */
 
+import $ from 'jquery'
 import { useState, useEffect } from 'react'
 import GoogleMapReact from 'google-map-react'
 import useSWR from 'swr'
 import { jsx, css } from '@emotion/core'
+import { useRef } from 'react/cjs/react.development'
 
 import { useCurrentLocation } from '../hooks/location'
 import { useLocalValue } from '../hooks/local-storage'
 import { Vehicles } from '../models/vehicles'
 import { useAsyncAction } from '../hooks/state'
+import { useTooltip } from './tooltip'
+import { BookingModal } from './booking-modal'
 
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY
 
@@ -38,15 +42,42 @@ function searchVehicles(carType, min, max) {
 	})
 }
 
-function VehicleMarker({ vehicle }) {
+function useBookingModal() {
+	const modalRef = useRef()
+	const [vehicle, setActiveVehicle] = useState()
+
+	useEffect(() => {
+		if (vehicle) {
+			$(modalRef.current).modal('show')
+			$(modalRef.current).on('hidden.bs.modal', () => {
+				setActiveVehicle()
+			})
+			return () => $(modalRef.current).modal('hide')
+		}
+	}, [vehicle, modalRef])
+
+	return [
+		vehicle && <BookingModal ref={modalRef} vehicle={vehicle} />,
+		{
+			setActiveVehicle,
+		},
+	]
+}
+
+function VehicleMarker({ vehicle, onClick }) {
+	const tooltipProps = useTooltip()
+
 	return (
-		<div
+		<img
+			src={vehicle.imageURL}
 			css={css`
-				width: 1rem;
-				height: 1rem;
-				background: #000;
+				height: 3rem;
+				width: auto;
 			`}
-		></div>
+			onClick={onClick}
+			title={`${vehicle.manufacturer} ${vehicle.model} ${vehicle.year}`}
+			{...tooltipProps}
+		/>
 	)
 }
 
@@ -56,6 +87,7 @@ export function Search() {
 	const [defaultZoom] = useState(() => zoomLevel)
 	const [mapCenter, setMapCenter] = useState()
 	const [google, setMapsAPI] = useState()
+	const [BookingModal, { setActiveVehicle }] = useBookingModal()
 
 	// Search parameters
 	const [address, setAddress] = useLocalValue('address', '')
@@ -217,6 +249,8 @@ export function Search() {
 					</form>
 				</div>
 				<div className="col">
+					{BookingModal}
+
 					<GoogleMapReact
 						bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
 						defaultZoom={defaultZoom}
@@ -234,9 +268,10 @@ export function Search() {
 							searchState.data.map((vehicle) => (
 								<VehicleMarker
 									key={vehicle.id}
-									vehicle={vehicle}
 									lat={vehicle.location.lat}
 									lng={vehicle.location.lng}
+									vehicle={vehicle}
+									onClick={() => setActiveVehicle(vehicle)}
 								/>
 							))}
 					</GoogleMapReact>

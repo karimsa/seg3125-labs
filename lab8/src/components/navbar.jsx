@@ -1,9 +1,12 @@
 /** @jsx jsx */
 
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { jsx, css } from '@emotion/core'
+import classNames from 'classnames'
 
 export function Navbar() {
+	const location = useLocation()
+
 	return (
 		<nav
 			className="navbar navbar-expand-lg navbar-dark bg-light"
@@ -29,15 +32,27 @@ export function Navbar() {
 
 				<div className="collapse navbar-collapse" id="navbar">
 					<ul className="navbar-nav ml-auto">
-						<li className="nav-item">
-							<a href="#" className="nav-link active">
-								testing
-							</a>
+						<li className="nav-item px-2">
+							<Link
+								to="/"
+								className={classNames('nav-link', {
+									active: location.pathname === '/',
+								})}
+							>
+								<i className="mr-2 fas fa-search" />
+								Search
+							</Link>
 						</li>
-						<li className="nav-item">
-							<a href="#" className="nav-link">
-								testing
-							</a>
+						<li className="nav-item px-2">
+							<Link
+								to="/bookings"
+								className={classNames('nav-link', {
+									active: location.pathname === '/bookings',
+								})}
+							>
+								<i className="mr-2 fas fa-bars" />
+								Bookings
+							</Link>
 						</li>
 					</ul>
 				</div>
