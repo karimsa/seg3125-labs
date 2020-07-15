@@ -2,4 +2,6 @@ node_modules
 *.log
 dist
 .cache
+.DS_Store
+._*
 

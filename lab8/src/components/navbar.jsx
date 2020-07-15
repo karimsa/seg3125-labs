@@ -31,6 +31,26 @@ export function Navbar() {
 				</button>
 
 				<div className="collapse navbar-collapse" id="navbar">
+					<p className="small text-white mb-0 text-center mr-auto ml-4">
+						Created by{' '}
+						<a
+							className="text-white border-bottom border-white"
+							href="https://alibhai.co"
+							rel="noreferrer noopener"
+							target="_blank"
+						>
+							Karim Alibhai
+						</a>
+						. See{' '}
+						<Link
+							className="text-white border-bottom border-white"
+							to="/citations"
+						>
+							works cited
+						</Link>
+						.
+					</p>
+
 					<ul className="navbar-nav ml-auto">
 						<li className="nav-item px-2">
 							<Link

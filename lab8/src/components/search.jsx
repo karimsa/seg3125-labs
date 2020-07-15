@@ -1,11 +1,10 @@
 /** @jsx jsx */
 
 import $ from 'jquery'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import GoogleMapReact from 'google-map-react'
-import useSWR from 'swr'
 import { jsx, css } from '@emotion/core'
-import { useRef } from 'react/cjs/react.development'
+import PropTypes from 'prop-types'
 
 import { useCurrentLocation } from '../hooks/location'
 import { useLocalValue } from '../hooks/local-storage'
@@ -29,16 +28,6 @@ function resolveAddress(google, address) {
 		} else {
 			reject(new Error(`API has not loaded yet`))
 		}
-	})
-}
-
-function searchVehicles(carType, min, max) {
-	return Vehicles.search({
-		carType,
-		price: {
-			min,
-			max,
-		},
 	})
 }
 
@@ -80,6 +69,10 @@ function VehicleMarker({ vehicle, onClick }) {
 		/>
 	)
 }
+VehicleMarker.propTypes = {
+	vehicle: Vehicles.propType,
+	onClick: PropTypes.func.isRequired,
+}
 
 export function Search() {
 	const currentLocationState = useCurrentLocation()
@@ -88,6 +81,10 @@ export function Search() {
 	const [mapCenter, setMapCenter] = useState()
 	const [google, setMapsAPI] = useState()
 	const [BookingModal, { setActiveVehicle }] = useBookingModal()
+
+	// Tooltips
+	const minInputTooltipProps = useTooltip()
+	const maxInputTooltipProps = useTooltip()
 
 	// Search parameters
 	const [address, setAddress] = useLocalValue('address', '')
@@ -99,10 +96,10 @@ export function Search() {
 
 	// Search
 	const [addressCoords, { fetch: fetchSearch }] = useAsyncAction(resolveAddress)
-	const searchState = useSWR(
-		[carType, priceRange.min, priceRange.max],
-		searchVehicles,
-	)
+	const searchState = Vehicles.useVehicles({
+		carType,
+		price: priceRange,
+	})
 
 	useEffect(() => {
 		if (currentLocationState.data && !mapCenter) {
@@ -204,7 +201,7 @@ export function Search() {
 									className="form-control"
 									min="0"
 									max="30"
-									step="5"
+									step="1"
 									placeholder="Min"
 									value={priceRange.min}
 									onChange={(evt) =>
@@ -213,13 +210,14 @@ export function Search() {
 											max: priceRange.max,
 										})
 									}
+									{...minInputTooltipProps}
 								/>
 								<input
 									type="number"
 									className="form-control"
 									min="0"
 									max="100"
-									step="5"
+									step="1"
 									placeholder="Max"
 									value={priceRange.max}
 									onChange={(evt) =>
@@ -228,6 +226,7 @@ export function Search() {
 											max: evt.target.value,
 										})
 									}
+									{...maxInputTooltipProps}
 								/>
 							</div>
 							<p className="small d-flex justify-content-between px-1 text-secondary">
@@ -236,7 +235,7 @@ export function Search() {
 							</p>
 						</div>
 
-						<div className="form-group text-center">
+						{/* <div className="form-group text-center">
 							<button
 								type="submit"
 								className="btn btn-primary"
@@ -245,7 +244,7 @@ export function Search() {
 								<i className="mr-2 fas fa-search" />
 								Search
 							</button>
-						</div>
+						</div> */}
 					</form>
 				</div>
 				<div className="col">

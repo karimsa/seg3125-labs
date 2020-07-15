@@ -9,6 +9,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css'
 import './styles.css'
 import { Navbar } from './components/navbar'
 import { Search } from './components/search'
+import { Citations } from './components/citations'
+import { StoreProvider } from './hooks/store'
 
 if (location.protocol !== 'https:') {
 	location.protocol = 'https:'
@@ -32,16 +34,19 @@ function NotFound() {
 
 function App() {
 	return (
-		<BrowserRouter>
-			<Navbar />
+		<StoreProvider>
+			<BrowserRouter>
+				<Navbar />
 
-			<main className="flex-grow-1 d-flex">
-				<Switch>
-					<Route path="/" component={Search} exact />
-					<Route component={NotFound} />
-				</Switch>
-			</main>
-		</BrowserRouter>
+				<main className="flex-grow-1 d-flex">
+					<Switch>
+						<Route path="/" component={Search} exact />
+						<Route path="/citations" component={Citations} exact />
+						<Route component={NotFound} />
+					</Switch>
+				</main>
+			</BrowserRouter>
+		</StoreProvider>
 	)
 }
 
