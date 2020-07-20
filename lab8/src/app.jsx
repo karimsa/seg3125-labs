@@ -10,6 +10,7 @@ import './styles.css'
 import { Navbar } from './components/navbar'
 import { Search } from './components/search'
 import { Citations } from './components/citations'
+import { BookingList } from './components/booking-list'
 import { StoreProvider } from './hooks/store'
 
 if (location.protocol !== 'https:') {
@@ -42,6 +43,7 @@ function App() {
 					<Switch>
 						<Route path="/" component={Search} exact />
 						<Route path="/citations" component={Citations} exact />
+						<Route path="/bookings" component={BookingList} exact />
 						<Route component={NotFound} />
 					</Switch>
 				</main>

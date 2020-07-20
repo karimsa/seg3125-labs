@@ -11,6 +11,7 @@ export function StoreProvider({ children }) {
 		() =>
 			JSON.parse(localStorage.getItem('store') || null) || {
 				vehicles: [],
+				bookings: [],
 			},
 	)
 	useEffect(() => {

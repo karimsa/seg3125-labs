@@ -12,6 +12,7 @@ const vehicleTemplates = [
 		imageWidth: 3,
 		type: 'sedan',
 		location: {
+			address: '123 Storybrooke Lane, Citee, Province',
 			lat: 0,
 			lng: 0,
 		},
@@ -19,6 +20,8 @@ const vehicleTemplates = [
 		model: 'Sonata',
 		year: 2019,
 		price: 15,
+		pricePerKm: 0.1,
+		amountDriven: 193487,
 	},
 	{
 		id: 1,
@@ -26,6 +29,7 @@ const vehicleTemplates = [
 		imageWidth: 3,
 		type: 'sedan',
 		location: {
+			address: '123 Storybrooke Lane, Citee, Province',
 			lat: 0,
 			lng: 0,
 		},
@@ -33,6 +37,8 @@ const vehicleTemplates = [
 		model: 'Sonata',
 		year: 2019,
 		price: 15,
+		pricePerKm: 0.1,
+		amountDriven: 1834803,
 	},
 	{
 		id: 2,
@@ -40,6 +46,7 @@ const vehicleTemplates = [
 		imageWidth: 3,
 		type: 'sedan',
 		location: {
+			address: '123 Storybrooke Lane, Citee, Province',
 			lat: 0.009,
 			lng: 0.009,
 		},
@@ -47,6 +54,8 @@ const vehicleTemplates = [
 		model: 'Sonata',
 		year: 2019,
 		price: 15,
+		pricePerKm: 0.1,
+		amountDriven: 193583,
 	},
 	{
 		id: 3,
@@ -54,6 +63,7 @@ const vehicleTemplates = [
 		imageWidth: 3,
 		type: 'sedan',
 		location: {
+			address: '123 Storybrooke Lane, Citee, Province',
 			lat: 0.019,
 			lng: 0.019,
 		},
@@ -61,6 +71,8 @@ const vehicleTemplates = [
 		model: 'Sonata',
 		year: 2019,
 		price: 15,
+		pricePerKm: 0.1,
+		amountDriven: 105000,
 	},
 	{
 		id: 4,
@@ -68,6 +80,7 @@ const vehicleTemplates = [
 		imageWidth: 4,
 		type: 'suv',
 		location: {
+			address: '123 Storybrooke Lane, Citee, Province',
 			lat: 0,
 			lng: 0.019,
 		},
@@ -75,6 +88,8 @@ const vehicleTemplates = [
 		model: 'CRV',
 		year: 2015,
 		price: 19,
+		pricePerKm: 0.15,
+		amountDriven: 19341,
 	},
 	{
 		id: 5,
@@ -82,6 +97,7 @@ const vehicleTemplates = [
 		imageWidth: 4,
 		type: 'suv',
 		location: {
+			address: '123 Storybrooke Lane, Citee, Province',
 			lat: 0,
 			lng: 0.019,
 		},
@@ -89,6 +105,8 @@ const vehicleTemplates = [
 		model: 'CRV',
 		year: 2015,
 		price: 19,
+		pricePerKm: 0.15,
+		amountDriven: 115358,
 	},
 	{
 		id: 6,
@@ -96,6 +114,7 @@ const vehicleTemplates = [
 		imageWidth: 4,
 		type: 'suv',
 		location: {
+			address: '123 Storybrooke Lane, Citee, Province',
 			lat: 0.019,
 			lng: 0,
 		},
@@ -103,6 +122,8 @@ const vehicleTemplates = [
 		model: 'CRV',
 		year: 2015,
 		price: 19,
+		pricePerKm: 0.15,
+		amountDriven: 105000,
 	},
 ]
 
@@ -157,6 +178,7 @@ export function useCurrentLocation() {
 					vehicles: vehicleTemplates.map((template) => ({
 						...template,
 						location: {
+							address: template.location.address,
 							lat:
 								template.location.lat +
 								coords.lat +

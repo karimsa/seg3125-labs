@@ -6,7 +6,9 @@ export function Citations() {
 			<div className="row">
 				<div className="col text-center">
 					<h2 className="mb-4">Citations</h2>
-					<ul>
+
+					<p className="font-weight-bold">External resources</p>
+					<ul className="mb-3">
 						<li>
 							Hyundai Sonata - Image from{' '}
 							<a href="https://driving.ca/hyundai/sonata">
@@ -19,6 +21,13 @@ export function Citations() {
 								https://www.motortrend.com/cars/honda/cr-v/2015/
 							</a>
 						</li>
+					</ul>
+
+					<p className="font-weight-bold">Technologies</p>
+					<ul>
+						<li>React</li>
+						<li>Bootstrap</li>
+						<li>Font awesome</li>
 					</ul>
 				</div>
 			</div>

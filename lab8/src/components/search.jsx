@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 import { useCurrentLocation } from '../hooks/location'
 import { useLocalValue } from '../hooks/local-storage'
 import { Vehicles } from '../models/vehicles'
+import { Bookings } from '../models/bookings'
 import { useAsyncAction } from '../hooks/state'
 import { useTooltip } from './tooltip'
 import { BookingModal } from './booking-modal'
@@ -114,7 +115,6 @@ export function Search() {
 
 	const error = currentLocationState.error
 	const nonFatalErr = searchState.error || addressCoords.error
-	const isLoading = searchState.isValidating
 
 	if (error) {
 		return (
@@ -124,6 +124,17 @@ export function Search() {
 						<div className="alert alert-danger" role="alert">
 							{String(error.message || error)}
 						</div>
+					</div>
+				</div>
+			</div>
+		)
+	}
+	if (searchState.isValidating) {
+		return (
+			<div className="container-fluid flex-grow-1 d-flex justify-content-center">
+				<div className="row flex-grow-1">
+					<div className="col d-flex align-items-center justify-content-center">
+						<p>Loading ...</p>
 					</div>
 				</div>
 			</div>
