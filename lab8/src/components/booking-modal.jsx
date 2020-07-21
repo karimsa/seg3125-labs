@@ -575,7 +575,7 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 					</div>
 					<div className="modal-footer d-flex align-items-center justify-content-between">
 						{step === NUM_STEPS - 1 ? (
-							<p className="col text-muted mb-0 small text-left">
+							<p className="col text-muted m-0 small text-left">
 								<I18NSwitch
 									fr={
 										<>

@@ -15,7 +15,7 @@ export const INSURANCE_OFFERINGS = [
 	},
 
 	{
-		title: { fr: 'Assurance de base', en: 'Basic premium' },
+		title: { fr: 'Assurance de base', en: 'Basic insurance' },
 		description: {
 			en: `This level of insurance gives you access to roadside assistance.`,
 			fr: `Ce niveau d'assurance vous donne accès à l'assistance routière.`,

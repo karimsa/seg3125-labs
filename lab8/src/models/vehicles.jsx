@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 
-import { useStore } from '../hooks/store'
+import { useStore, useStoreValue } from '../hooks/store'
 
 // const LAT_DIFF = 1
 // const LNG_DIFF = 1
@@ -19,17 +19,42 @@ export const Vehicles = {
 		}).isRequired,
 	}),
 
-	useVehicles({ carType, price }) {
-		const [store] = useStore()
-		return useMemo(() => {
-			if (!store) {
-				return { isValidating: true }
-			}
-			return {
-				isValidating: false,
-				data: store.vehicles.filter((vehicle) => {
+	useManufacturers() {
+		return useStoreValue(
+			(store) => {
+				return [
+					...store.vehicles.reduce((list, vehicle) => {
+						list.add(vehicle.manufacturer)
+						return list
+					}, new Set()),
+				]
+			},
+			(store) => [store.vehicles],
+		)
+	},
+
+	useModels() {
+		return useStoreValue(
+			(store) => {
+				return [
+					...store.vehicles.reduce((list, vehicle) => {
+						list.add(vehicle.model)
+						return list
+					}, new Set()),
+				]
+			},
+			(store) => [store.vehicles],
+		)
+	},
+
+	useVehicles({ carType, price, manufacturer, model }) {
+		return useStoreValue(
+			(store) => {
+				return store.vehicles.filter((vehicle) => {
 					return (
 						(vehicle.type === carType || carType === 'all') &&
+						(vehicle.manufacturer === manufacturer || manufacturer === 'all') &&
+						(vehicle.model === model || model === 'all') &&
 						price.min <= vehicle.price &&
 						vehicle.price <= price.max
 						// &&
@@ -38,9 +63,10 @@ export const Vehicles = {
 						// lng - LNG_DIFF <= vehicle.lng &&
 						// vehicle.lng <= lng - LNG_DIFF
 					)
-				}),
-			}
-		}, [store?.vehicles, carType, price])
+				})
+			},
+			(store) => [store?.vehicles, carType, price, manufacturer, model],
+		)
 	},
 
 	useVehicleById(id) {

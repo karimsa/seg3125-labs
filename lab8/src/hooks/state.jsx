@@ -2,6 +2,20 @@ import { useState, useReducer, useEffect } from 'react'
 
 const kPromise = Symbol('promise')
 
+export function useCombinedAsync(states) {
+	const state = {
+		isValidating: false,
+		error: null,
+		data: [],
+	}
+	for (const one of states) {
+		state.isValidating = state.isValidating || one.isValidating
+		state.error = state.error || one.error
+		state.data.push(one.data)
+	}
+	return state
+}
+
 export function useAsyncAction(fn, deps) {
 	const [asyncArgs, setAsyncArgs] = useState()
 	const [state, dispatch] = useReducer(

@@ -1,15 +1,12 @@
-/** @jsx jsx */
-
 import $ from 'jquery'
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import GoogleMapReact from 'google-map-react'
-import { jsx, css } from '@emotion/core'
 import PropTypes from 'prop-types'
 
 import { useCurrentLocation } from '../hooks/location'
 import { useLocalValue } from '../hooks/local-storage'
 import { Vehicles } from '../models/vehicles'
-import { useAsyncAction } from '../hooks/state'
+import { useAsyncAction, useCombinedAsync } from '../hooks/state'
 import { useTooltip } from './tooltip'
 import { BookingModal } from './booking-modal'
 import { I18NSwitch } from '../hooks/i18n'
@@ -60,10 +57,10 @@ function VehicleMarker({ vehicle, onClick }) {
 	return (
 		<img
 			src={vehicle.imageURL}
-			css={css`
-				height: ${vehicle.imageWidth}rem;
-				width: auto;
-			`}
+			style={{
+				height: `${vehicle.imageWidth}rem`,
+				width: 'auto',
+			}}
 			onClick={onClick}
 			title={`${vehicle.manufacturer} ${vehicle.model} ${vehicle.year}`}
 			{...tooltipProps}
@@ -82,6 +79,9 @@ export function Search() {
 	const [mapCenter, setMapCenter] = useState()
 	const [google, setMapsAPI] = useState()
 	const [BookingModal, { setActiveVehicle }] = useBookingModal()
+	const [advancedSearchEnabled, setAdvancedSearchEnabled] = useLocalValue(
+		'advanced-search-enabled',
+	)
 
 	// Tooltips
 	const minInputTooltipProps = useTooltip()
@@ -97,10 +97,22 @@ export function Search() {
 
 	// Search
 	const [addressCoords, { fetch: fetchSearch }] = useAsyncAction(resolveAddress)
-	const searchState = Vehicles.useVehicles({
-		carType,
-		price: priceRange,
-	})
+	const [manufacturer, setManufacturer] = useState('all')
+	const [model, setModel] = useState('all')
+	const {
+		isValidating,
+		error: asyncErr,
+		data: [manufacturers, models, searchResults],
+	} = useCombinedAsync([
+		Vehicles.useManufacturers(),
+		Vehicles.useModels(),
+		Vehicles.useVehicles({
+			carType,
+			price: priceRange,
+			manufacturer,
+			model,
+		}),
+	])
 
 	useEffect(() => {
 		if (currentLocationState.data && !mapCenter) {
@@ -114,7 +126,7 @@ export function Search() {
 	}, [google, address, addressCoords.data])
 
 	const error = currentLocationState.error
-	const nonFatalErr = searchState.error || addressCoords.error
+	const nonFatalErr = asyncErr
 
 	if (error) {
 		return (
@@ -129,12 +141,14 @@ export function Search() {
 			</div>
 		)
 	}
-	if (searchState.isValidating) {
+	if (isValidating) {
 		return (
 			<div className="container-fluid flex-grow-1 d-flex justify-content-center">
 				<div className="row flex-grow-1">
 					<div className="col d-flex align-items-center justify-content-center">
-						<p>Loading ...</p>
+						<div className="spinner-border text-primary" role="status">
+							<span className="sr-only">Loading...</span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -277,6 +291,62 @@ export function Search() {
 								</span>
 							</p>
 						</div>
+
+						{advancedSearchEnabled && (
+							<>
+								<div className="form-group">
+									<label className="col-form-label">Manufacturer</label>
+									<select
+										className="form-control"
+										value={manufacturer}
+										onChange={(evt) => setManufacturer(evt.target.value)}
+									>
+										<option value="all">All</option>
+										{manufacturers.map((manufacturer) => (
+											<option key={manufacturer} value={manufacturer}>
+												{manufacturer}
+											</option>
+										))}
+									</select>
+								</div>
+
+								<div className="form-group">
+									<label className="col-form-label">Model</label>
+									<select
+										className="form-control"
+										value={model}
+										onChange={(evt) => setModel(evt.target.value)}
+									>
+										<option value="all">All</option>
+										{models.map((model) => (
+											<option key={model} value={model}>
+												{model}
+											</option>
+										))}
+									</select>
+								</div>
+							</>
+						)}
+
+						<div className="form-group text-right">
+							{advancedSearchEnabled ? (
+								<button
+									type="button"
+									className="btn btn-link btn-sm small px-0"
+									onClick={() => setAdvancedSearchEnabled(false)}
+								>
+									Simple search
+								</button>
+							) : (
+								<button
+									type="button"
+									className="btn btn-link btn-sm small px-0"
+									onClick={() => setAdvancedSearchEnabled(true)}
+								>
+									Advanced search
+								</button>
+							)}
+						</div>
 					</form>
 				</div>
 				<div className="col">
@@ -295,16 +365,15 @@ export function Search() {
 							setMapsAPI({ map, maps, geocoder: new maps.Geocoder() })
 						}}
 					>
-						{searchState.data &&
-							searchState.data.map((vehicle) => (
-								<VehicleMarker
-									key={vehicle.id}
-									lat={vehicle.location.lat}
-									lng={vehicle.location.lng}
-									vehicle={vehicle}
-									onClick={() => setActiveVehicle(vehicle)}
-								/>
-							))}
+						{searchResults?.map((vehicle) => (
+							<VehicleMarker
+								key={vehicle.id}
+								lat={vehicle.location.lat}
+								lng={vehicle.location.lng}
+								vehicle={vehicle}
+								onClick={() => setActiveVehicle(vehicle)}
+							/>
+						))}
 					</GoogleMapReact>
 				</div>
 			</div>
