@@ -82,6 +82,7 @@ export function Search() {
 	const [advancedSearchEnabled, setAdvancedSearchEnabled] = useLocalValue(
 		'advanced-search-enabled',
 	)
+	const [retryKey, setRetryKey] = useState()
 
 	// Tooltips
 	const minInputTooltipProps = useTooltip()
@@ -101,17 +102,22 @@ export function Search() {
 	const [model, setModel] = useState('all')
 	const {
 		isValidating,
-		error: asyncErr,
+		error: nonFatalErr,
 		data: [manufacturers, models, searchResults],
 	} = useCombinedAsync([
-		Vehicles.useManufacturers(),
-		Vehicles.useModels(),
-		Vehicles.useVehicles({
-			carType,
-			price: priceRange,
-			manufacturer,
-			model,
-		}),
+		Vehicles.useManufacturers(null, { retryKey }),
+		Vehicles.useModels(null, { retryKey }),
+		Vehicles.useVehicles(
+			{
+				carType,
+				price: priceRange,
+				manufacturer,
+				model,
+			},
+			{
+				retryKey,
+			},
+		),
 	])
 
 	useEffect(() => {
@@ -126,7 +132,6 @@ export function Search() {
 	}, [google, address, addressCoords.data])
 
 	const error = currentLocationState.error
-	const nonFatalErr = asyncErr
 
 	if (error) {
 		return (
@@ -134,7 +139,9 @@ export function Search() {
 				<div className="row flex-grow-1">
 					<div className="col d-flex align-items-center justify-content-center">
 						<div className="alert alert-danger" role="alert">
-							{String(error.message || error)}
+							Sorry, the application has failed to load. You can try refreshing
+							the page to fix this.
+							<a href={location.href}>Refresh</a>
 						</div>
 					</div>
 				</div>
@@ -191,7 +198,19 @@ export function Search() {
 						{nonFatalErr && (
 							<div className="form-group">
 								<div className="alert alert-danger" role="alert">
-									{String(nonFatalErr.message || nonFatalErr)}
+									<p>
+										Sorry, I failed to fetch results for your search. To fix
+										this, you can try again later or click the retry button.
+									</p>
+									<button
+										type="button"
+										className="btn btn-primary btn-sm"
+										onClick={() => {
+											setRetryKey(Date.now())
+										}}
+									>
+										Retry
+									</button>
 								</div>
 							</div>
 						)}

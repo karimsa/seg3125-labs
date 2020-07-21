@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 
 import { useStore, useStoreValue } from '../hooks/store'
 
@@ -19,7 +19,7 @@ export const Vehicles = {
 		}).isRequired,
 	}),
 
-	useManufacturers() {
+	useManufacturers(_, { retryKey }) {
 		return useStoreValue(
 			(store) => {
 				return [
@@ -29,11 +29,11 @@ export const Vehicles = {
 					}, new Set()),
 				]
 			},
-			(store) => [store.vehicles],
+			(store) => [store.vehicles, retryKey],
 		)
 	},
 
-	useModels() {
+	useModels(_, { retryKey }) {
 		return useStoreValue(
 			(store) => {
 				return [
@@ -43,13 +43,18 @@ export const Vehicles = {
 					}, new Set()),
 				]
 			},
-			(store) => [store.vehicles],
+			(store) => [store.vehicles, retryKey],
 		)
 	},
 
-	useVehicles({ carType, price, manufacturer, model }) {
-		return useStoreValue(
+	useVehicles({ carType, price, manufacturer, model }, { retryKey }) {
+		const ref = useRef()
+		ref.current = useStoreValue(
 			(store) => {
+				// if (!ref.current?.error) {
+				// 	throw new Error(`Internal server error`)
+				// }
+
 				return store.vehicles.filter((vehicle) => {
 					return (
 						(vehicle.type === carType || carType === 'all') &&
@@ -57,16 +62,19 @@ export const Vehicles = {
 						(vehicle.model === model || model === 'all') &&
 						price.min <= vehicle.price &&
 						vehicle.price <= price.max
-						// &&
-						// lat - LAT_DIFF <= vehicle.lat &&
-						// vehicle.lat <= lat + LAT_DIFF &&
-						// lng - LNG_DIFF <= vehicle.lng &&
-						// vehicle.lng <= lng - LNG_DIFF
 					)
 				})
 			},
-			(store) => [store?.vehicles, carType, price, manufacturer, model],
+			(store) => [
+				store?.vehicles,
+				carType,
+				price,
+				manufacturer,
+				model,
+				retryKey,
+			],
 		)
+		return ref.current
 	},
 
 	useVehicleById(id) {

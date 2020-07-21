@@ -14,6 +14,14 @@ export function useStore() {
 
 export function useStoreValue(fn, deps) {
 	const [store] = useStore()
+	const [lastFocusedAt, setLastFocusedAt] = useState()
+	useEffect(() => {
+		function handler() {
+			setLastFocusedAt(Date.now())
+		}
+		window.addEventListener('focus', handler)
+		return () => window.removeEventListener('focus', handler)
+	}, [])
 	return useMemo(() => {
 		if (!store) {
 			return { isValidating: true }
@@ -25,9 +33,14 @@ export function useStoreValue(fn, deps) {
 				data: fn(store),
 			}
 		} catch (error) {
-			return { error }
+			console.warn(error)
+			return {
+				error: new Error(
+					`Sorry, something has gone wrong. Please try reloading the page.`,
+				),
+			}
 		}
-	}, deps(store))
+	}, [...deps(store), lastFocusedAt])
 }
 
 export function StoreProvider({ children }) {
