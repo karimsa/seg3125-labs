@@ -4,8 +4,11 @@ import { Link, useLocation } from 'react-router-dom'
 import { jsx, css } from '@emotion/core'
 import classNames from 'classnames'
 
+import { Bookings } from '../models/bookings'
+
 export function Navbar() {
 	const location = useLocation()
+	const activeBooking = Bookings.useActiveBooking()
 
 	return (
 		<nav
@@ -75,6 +78,12 @@ export function Navbar() {
 							</Link>
 						</li>
 					</ul>
+
+					{activeBooking && (
+						<Link to="/bookings/active" className="btn btn-success">
+							Active booking
+						</Link>
+					)}
 				</div>
 			</div>
 		</nav>

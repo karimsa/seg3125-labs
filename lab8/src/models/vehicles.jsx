@@ -46,7 +46,7 @@ export const Vehicles = {
 	useVehicleById(id) {
 		const [store] = useStore()
 		return useMemo(() => {
-			if (!store) {
+			if (!store || id === undefined) {
 				return { isValidating: true }
 			}
 
@@ -65,6 +65,6 @@ export const Vehicles = {
 				isValidating: false,
 				data: vehicle,
 			}
-		}, [store?.vehicles])
+		}, [id, store?.vehicles])
 	},
 }

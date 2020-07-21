@@ -12,6 +12,7 @@ import { Search } from './components/search'
 import { Citations } from './components/citations'
 import { BookingList } from './components/booking-list'
 import { StoreProvider } from './hooks/store'
+import { ActiveBooking } from './components/active-booking'
 
 if (location.protocol !== 'https:') {
 	location.protocol = 'https:'
@@ -39,11 +40,12 @@ function App() {
 			<BrowserRouter>
 				<Navbar />
 
-				<main className="flex-grow-1 d-flex">
+				<main className="flex-grow-1 d-flex bg-light">
 					<Switch>
 						<Route path="/" component={Search} exact />
 						<Route path="/citations" component={Citations} exact />
 						<Route path="/bookings" component={BookingList} exact />
+						<Route path="/bookings/active" component={ActiveBooking} exact />
 						<Route component={NotFound} />
 					</Switch>
 				</main>

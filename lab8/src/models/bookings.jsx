@@ -1,6 +1,23 @@
 import { useMemo } from 'react'
+import moment from 'moment'
 
 import { useStore } from '../hooks/store'
+
+export const INSURANCE_OFFERINGS = [
+	{
+		title: 'Minimum insured',
+		price: 5,
+		planID: 'min',
+	},
+
+	{
+		title: 'Basic insurance',
+		price: 8,
+		planID: 'basic',
+	},
+
+	{ title: 'Premium insurance', price: 10, planID: 'premium' },
+]
 
 export const Bookings = {
 	useBookings() {
@@ -11,6 +28,19 @@ export const Bookings = {
 			}
 			return { data: store.bookings }
 		}, [store])
+	},
+
+	useActiveBooking() {
+		const { data: bookings } = Bookings.useBookings()
+		return useMemo(() => {
+			return bookings?.find((booking) => {
+				const timeStart = moment(booking.timeStart)
+				const timeEnd = moment(booking.timeEnd)
+				return (
+					moment().isSameOrAfter(timeStart) && moment().isSameOrBefore(timeEnd)
+				)
+			})
+		}, [bookings])
 	},
 
 	useActions() {

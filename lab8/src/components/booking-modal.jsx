@@ -6,36 +6,10 @@ import moment from 'moment'
 import ms from 'ms'
 
 import { Vehicles } from '../models/vehicles'
-import { Bookings } from '../models/bookings'
+import { Bookings, INSURANCE_OFFERINGS } from '../models/bookings'
+import { formatNum, formatDate } from '../formatters'
 
 const NUM_STEPS = 4
-const INSURANCE_OFFERINGS = [
-	{
-		title: 'Minimum insured',
-		price: 5,
-		planID: 'min',
-	},
-
-	{
-		title: 'Basic insurance',
-		price: 8,
-		planID: 'basic',
-	},
-
-	{ title: 'Premium insurance', price: 10, planID: 'premium' },
-]
-
-function formatNum(n) {
-	let string = String(n)
-	for (let i = string.length - 3; i > 0; i -= 3) {
-		string = string.substr(0, i) + ', ' + string.substr(i)
-	}
-	return string
-}
-
-function formatDate(d) {
-	return moment(d).format('MMM D, YYYY hh:ss A z')
-}
 
 function DateTimeInput({ value, onChange }) {
 	return (
@@ -122,6 +96,9 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 		insurancePlan: 'basic',
 		timeStart: new Date(),
 		timeEnd: new Date(Date.now() + 24 * 60 * 60 * 1000),
+
+		// lies, all lies
+		kmDriven: Math.round(Math.random() * 50),
 	})
 
 	useEffect(() => {
