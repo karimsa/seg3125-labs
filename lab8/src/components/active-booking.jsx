@@ -4,12 +4,14 @@ import React, { useRef, useEffect } from 'react'
 import { Bookings, INSURANCE_OFFERINGS } from '../models/bookings'
 import { Vehicles } from '../models/vehicles'
 import { formatDate } from '../formatters'
+import { useI18N, I18NSwitch } from '../hooks/i18n'
 
 export function ActiveBooking() {
 	const activeBooking = Bookings.useActiveBooking()
 	const { isValidating, data: vehicle } = Vehicles.useVehicleById(
 		activeBooking?.vehicleID,
 	)
+	const [lang] = useI18N()
 
 	const modalRef = useRef()
 	useEffect(() => {
@@ -46,10 +48,16 @@ export function ActiveBooking() {
 												<p className="font-weight-bold">
 													{vehicle.manufacturer} {vehicle.model} {vehicle.year}
 												</p>
-												<p>Picked up {formatDate(activeBooking.timeStart)}</p>
 												<p>
-													Expected dropoff up{' '}
-													{formatDate(activeBooking.timeEnd)}
+													<I18NSwitch fr="Retrait le" default="Picked up" />{' '}
+													{formatDate(activeBooking.timeStart, lang)}
+												</p>
+												<p>
+													<I18NSwitch
+														fr="Dépôt prévu"
+														default="Expected dropoff up"
+													/>{' '}
+													{formatDate(activeBooking.timeEnd, lang)}
 												</p>
 											</div>
 										</div>
@@ -58,25 +66,34 @@ export function ActiveBooking() {
 											<div className="col-auto d-flex align-items-center justify-content-between">
 												<div
 													className="bg-success text-white rounded-circle d-flex flex-column align-items-center justify-content-center text-center"
-													style={{ width: '7rem', height: '7rem' }}
+													style={{ width: '10rem', height: '10rem' }}
 												>
 													<span style={{ fontSize: '2rem' }}>
 														{activeBooking.kmDriven}
 													</span>
-													<span className="mb-2">km driven</span>
+													<span className="mb-2">
+														<I18NSwitch
+															fr="km en voiture"
+															default="km driven"
+														/>
+													</span>
 												</div>
 												<div
 													className="bg-success text-white rounded-circle d-flex flex-column align-items-center justify-content-center text-center ml-3"
-													style={{ width: '7rem', height: '7rem' }}
+													style={{ width: '10rem', height: '10rem' }}
 												>
 													<span style={{ fontSize: '2rem' }}>
 														{(
 															activeBooking.kmDriven * vehicle.pricePerKm +
 															hoursBooked *
 																(vehicle.price + insurancePlan.price)
-														).toFixed(2)}
+														)
+															.toFixed(2)
+															.replace('.', lang === 'fr' ? ',' : '.')}
 													</span>
-													<span className="mb-2">spent</span>
+													<span className="mb-2">
+														<I18NSwitch fr="dépensés" default="spent" />
+													</span>
 												</div>
 											</div>
 										</div>
@@ -91,7 +108,10 @@ export function ActiveBooking() {
 													$(modalRef.current).modal('show')
 												}}
 											>
-												End booking
+												<I18NSwitch
+													fr="Terminer la réservation"
+													default="End booking"
+												/>
 											</button>
 										</div>
 									</div>
@@ -114,7 +134,10 @@ export function ActiveBooking() {
 					<div className="modal-content">
 						<div className="modal-header">
 							<h5 className="modal-title" id="endLabel">
-								End booking
+								<I18NSwitch
+									fr="Terminer la réservation"
+									default="End booking"
+								/>
 							</h5>
 							<button
 								type="button"
@@ -128,9 +151,10 @@ export function ActiveBooking() {
 						<div className="modal-body">
 							<p className="lead my-3">
 								{/* More lies */}
-								To end your vehicle booking, simply tap your key card on the
-								car&apos;s reader. The booking will automatically end and this
-								page will update.
+								<I18NSwitch
+									fr="Pour mettre fin à la réservation de votre véhicule, appuyez simplement sur votre carte-clé sur le lecteur de la voiture. La réservation se terminera automatiquement et cette page sera mise à jour."
+									default="To end your vehicle booking, simply tap your key card on the car's reader. The booking will automatically end and this page will update."
+								/>
 							</p>
 						</div>
 					</div>

@@ -40,7 +40,7 @@ export const Vehicles = {
 					)
 				}),
 			}
-		}, [store?.vehicles])
+		}, [store?.vehicles, carType, price])
 	},
 
 	useVehicleById(id) {

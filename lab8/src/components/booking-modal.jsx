@@ -3,11 +3,11 @@ import React, { forwardRef, useState, useEffect } from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import ms from 'ms'
 
 import { Vehicles } from '../models/vehicles'
 import { Bookings, INSURANCE_OFFERINGS } from '../models/bookings'
-import { formatNum, formatDate } from '../formatters'
+import { formatNum, formatDate, formatMs } from '../formatters'
+import { I18NSwitch, useI18N, I18NDollar } from '../hooks/i18n'
 
 const NUM_STEPS = 4
 
@@ -19,7 +19,6 @@ function DateTimeInput({ value, onChange }) {
 				className="form-control"
 				value={moment(value).format('YYYY-MM-DD')}
 				onChange={(evt) => {
-					console.warn(evt.target.value)
 					const updatedDate = moment(evt.target.value, 'YYYY-MM-DD')
 					onChange(
 						moment(value)
@@ -73,7 +72,10 @@ function InsuranceCard({ title, price, isSelected, onClick }) {
 						)}
 					>
 						<span>{title}</span>
-						<span>${price} per hour</span>
+						<span>
+							<I18NSwitch fr="" default="$" />
+							{price} <I18NSwitch fr="$ l'heure" default="per hour" />
+						</span>
 					</div>
 				</div>
 			</div>
@@ -100,6 +102,7 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 		// lies, all lies
 		kmDriven: Math.round(Math.random() * 50),
 	})
+	const [lang] = useI18N()
 
 	useEffect(() => {
 		setBooking({
@@ -127,7 +130,7 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 				<div className="modal-content">
 					<div className="modal-header">
 						<h5 className="modal-title" id="carModalLabel">
-							Book a vehicle
+							<I18NSwitch fr="Réservez un véhicule" default="Book a vehicle" />
 						</h5>
 						<button
 							type="button"
@@ -173,7 +176,10 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 									<div className="row">
 										<div className="col text-center">
 											<h5 className="font-weight-bold mb-4">
-												Confirm your vehicle
+												<I18NSwitch
+													fr="Confirmez votre véhicule"
+													default="Confirm your vehicle"
+												/>
 											</h5>
 										</div>
 									</div>
@@ -199,22 +205,54 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 														<td>{vehicle.location.address}</td>
 													</tr>
 													<tr>
-														<th>Price per hour:</th>
+														<th>
+															<I18NSwitch
+																fr="Prix par heure:"
+																default="Price per hour:"
+															/>
+														</th>
 														<td></td>
-														<td>$ {vehicle.price.toFixed(2)} (USD)</td>
+														<td>
+															<I18NSwitch
+																fr={`${vehicle.price.toFixed(2)} $ (USD)`}
+																default={`$ ${vehicle.price.toFixed(2)} (USD)`}
+															/>
+														</td>
 													</tr>
 													<tr>
-														<th>Price per km:</th>
+														<th>
+															<I18NSwitch
+																fr="Prix au km:"
+																default="Price per km:"
+															/>
+														</th>
 														<td></td>
-														<td>$ {vehicle.pricePerKm.toFixed(2)} (USD)</td>
+														<td>
+															<I18NSwitch
+																fr={`${vehicle.pricePerKm.toFixed(2)} $ (USD)`}
+																default={`$ ${vehicle.pricePerKm.toFixed(
+																	2,
+																)} (USD)`}
+															/>
+														</td>
 													</tr>
 													<tr>
-														<th>Amount driven:</th>
+														<th>
+															<I18NSwitch
+																fr="Montant entraîné:"
+																default="Amount driven:"
+															/>
+														</th>
 														<td></td>
 														<td>{formatNum(vehicle.amountDriven)} km</td>
 													</tr>
 													<tr>
-														<th>Year of make:</th>
+														<th>
+															<I18NSwitch
+																fr="Année de fabrication:"
+																default="Year of make:"
+															/>
+														</th>
 														<td></td>
 														<td>{vehicle.year}</td>
 													</tr>
@@ -229,7 +267,10 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 									<div className="row">
 										<div className="col text-center">
 											<h5 className="font-weight-bold mb-4">
-												Confirm your insurance
+												<I18NSwitch
+													fr="Confirmez votre assurance"
+													default="Confirm your insurance"
+												/>
 											</h5>
 										</div>
 									</div>
@@ -244,7 +285,7 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 													key={offering.planID}
 												>
 													<InsuranceCard
-														title={offering.title}
+														title={offering.title[lang]}
 														price={offering.price}
 														isSelected={
 															booking.insurancePlan === offering.planID
@@ -258,58 +299,10 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 													/>
 												</div>
 											))}
-
-											{/* <div className="mb-3">
-												<InsuranceCard
-													title="Minimum insured"
-													price={5}
-													isSelected={booking.insurancePlan === 'min'}
-													onClick={() =>
-														setBooking({
-															...booking,
-															insurancePlan: 'min',
-														})
-													}
-												/>
-											</div>
-
-											<div className="mb-3">
-												<InsuranceCard
-													title="Basic insurance"
-													price={8}
-													isSelected={booking.insurancePlan === 'basic'}
-													onClick={() =>
-														setBooking({
-															...booking,
-															insurancePlan: 'basic',
-														})
-													}
-												/>
-											</div>
-
-											<InsuranceCard
-												title="Premium insurance"
-												price={10}
-												isSelected={booking.insurancePlan === 'premium'}
-												onClick={() =>
-													setBooking({
-														...booking,
-														insurancePlan: 'premium',
-													})
-												}
-											/> */}
 										</div>
 										<div className="col d-flex align-items-center">
 											<p className="lead text-center">
-												{{
-													min: `This level of insurance only covers tire changes.`,
-													basic: `This level of insurance gives you access to roadside assistance.`,
-													premium: `This level of insurance will cover damages up to $1000.`,
-												}[booking.insurancePlan] || (
-													<div className="alert alert-danger" role="alert">
-														Sorry, something went wrong.
-													</div>
-												)}
+												{activeInsurancePlan.description[lang]}
 											</p>
 										</div>
 									</div>
@@ -320,7 +313,10 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 									<div className="row">
 										<div className="col text-center">
 											<h5 className="font-weight-bold">
-												Confirm pickup &amp; dropoff times
+												<I18NSwitch
+													fr="Confirmer les heures de ramassage et de dépôt"
+													default="Confirm pickup &amp; dropoff times"
+												/>
 											</h5>
 										</div>
 									</div>
@@ -328,7 +324,12 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 									<div className="row justify-content-center">
 										<div className="col">
 											<div className="form-group">
-												<label className="col-form-label">Pickup time</label>
+												<label className="col-form-label">
+													<I18NSwitch
+														fr="Heure de ramassage"
+														default="Pickup time"
+													/>
+												</label>
 												<DateTimeInput
 													value={booking.timeStart}
 													onChange={(timeStart) =>
@@ -341,7 +342,12 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 											</div>
 
 											<div className="form-group">
-												<label className="col-form-label">Dropoff time</label>
+												<label className="col-form-label">
+													<I18NSwitch
+														fr="Heure de dépôt"
+														default="Dropoff time"
+													/>
+												</label>
 												<DateTimeInput
 													value={booking.timeEnd}
 													onChange={(timeEnd) =>
@@ -358,19 +364,30 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 											<table>
 												<tbody>
 													<tr>
-														<th>Trip length:</th>
+														<th>
+															<I18NSwitch
+																fr="Durée du voyage:"
+																default="Trip length:"
+															/>
+														</th>
 														<td className="px-2" />
-														<td>{ms(bookingTimeLength, { long: true })}</td>
+														<td>{formatMs(bookingTimeLength, lang)}</td>
 													</tr>
 													<tr>
-														<th>Estimated cost:</th>
+														<th>
+															<I18NSwitch
+																fr="Coût estimé:"
+																default="Estimated cost:"
+															/>
+														</th>
 														<td />
 														<td>
-															$
-															{(
-																(bookingTimeLength / (1000 * 60 * 60)) *
-																vehicle.price
-															).toFixed(2)}
+															<I18NDollar
+																number={
+																	(bookingTimeLength / (1000 * 60 * 60)) *
+																	vehicle.price
+																}
+															/>
 														</td>
 													</tr>
 												</tbody>
@@ -383,23 +400,45 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 								<React.Fragment>
 									<div className="row">
 										<div className="col text-center">
-											<h5 className="font-weight-bold">Summary of booking</h5>
+											<h5 className="font-weight-bold">
+												<I18NSwitch
+													fr="Résumé de la réservation"
+													default="Summary of booking"
+												/>
+											</h5>
 										</div>
 									</div>
 
 									<div className="row">
 										<div className="col">
-											<p className="text-center">
-												Pickup from{' '}
-												<span className="font-weight-bold text-primary">
-													{vehicle.location.address}
-												</span>{' '}
-												at{' '}
-												<span className="font-weight-bold text-primary">
-													{formatDate(booking.timeStart)}
-												</span>
-												.
-											</p>
+											<I18NSwitch
+												fr={
+													<p className="text-center">
+														Prise en charge au{' '}
+														<span className="font-weight-bold text-primary">
+															{vehicle.location.address}
+														</span>{' '}
+														à{' '}
+														<span className="font-weight-bold text-primary">
+															{formatDate(booking.timeStart, lang)}
+														</span>
+														.
+													</p>
+												}
+												default={
+													<p className="text-center">
+														Pickup from{' '}
+														<span className="font-weight-bold text-primary">
+															{vehicle.location.address}
+														</span>{' '}
+														at{' '}
+														<span className="font-weight-bold text-primary">
+															{formatDate(booking.timeStart, lang)}
+														</span>
+														.
+													</p>
+												}
+											/>
 										</div>
 									</div>
 
@@ -416,7 +455,9 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 											<table>
 												<tbody>
 													<tr>
-														<th>Vehicle:</th>
+														<th>
+															<I18NSwitch fr="Véhicule:" default="Vehicle:" />
+														</th>
 														<td className="px-2"></td>
 														<td>
 															{vehicle.manufacturer} {vehicle.model}{' '}
@@ -424,45 +465,84 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 														</td>
 													</tr>
 													<tr>
-														<th>Located at:</th>
+														<th>
+															<I18NSwitch fr="Situé à:" default="Located at:" />
+														</th>
 														<td className="px-2"></td>
 														<td>{vehicle.location.address}</td>
 													</tr>
 													<tr>
-														<th>Price per hour:</th>
+														<th>
+															<I18NSwitch
+																fr="Prix par heure:"
+																default="Price per hour:"
+															/>
+														</th>
 														<td></td>
-														<td>$ {vehicle.price.toFixed(2)} (USD)</td>
+														<td>
+															<I18NDollar number={vehicle.price} /> (USD)
+														</td>
 													</tr>
 													<tr>
-														<th>Price per km:</th>
+														<th>
+															<I18NSwitch
+																fr="Prix au km:"
+																default="Price per km:"
+															/>
+														</th>
 														<td></td>
-														<td>$ {vehicle.pricePerKm.toFixed(2)} (USD)</td>
+														<td>
+															<I18NDollar number={vehicle.pricePerKm} /> (USD)
+														</td>
 													</tr>
 													<tr>
-														<th>Insurance plan:</th>
+														<th>
+															<I18NSwitch
+																fr="Plan d'assurance"
+																default="Insurance plan"
+															/>
+															:
+														</th>
 														<td />
 														<td>
-															{activeInsurancePlan.title} ($
-															{activeInsurancePlan.price.toFixed(2)})
+															{activeInsurancePlan.title[lang]} (
+															<I18NDollar number={activeInsurancePlan.price} />)
 														</td>
 													</tr>
 													<tr>
-														<th>Pickup time:</th>
+														<th>
+															<I18NSwitch
+																fr="Heure de ramassage"
+																default="Pickup time"
+															/>
+															:
+														</th>
 														<td className="px-2" />
-														<td>{formatDate(booking.timeStart)}</td>
+														<td>{formatDate(booking.timeStart, lang)}</td>
 													</tr>
 													<tr>
-														<th>Dropoff time:</th>
+														<th>
+															<I18NSwitch
+																fr="Heure de dépôt"
+																default="Dropoff time"
+															/>
+															:
+														</th>
 														<td className="px-2" />
 														<td>
-															{formatDate(booking.timeEnd)} (
-															{ms(bookingTimeLength, { long: true })})
+															{formatDate(booking.timeEnd, lang)} (
+															{formatMs(bookingTimeLength, lang)})
 														</td>
 													</tr>
 													<tr>
-														<th>Trip length:</th>
+														<th>
+															<I18NSwitch
+																fr="Durée du voyage:"
+																default="Trip length:"
+															/>
+														</th>
 														<td className="px-2" />
-														<td>{ms(bookingTimeLength, { long: true })}</td>
+														<td>{formatMs(bookingTimeLength, lang)}</td>
 													</tr>
 												</tbody>
 											</table>
@@ -473,14 +553,18 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 										<div className="col">
 											<div className="d-flex justify-content-between">
 												<p className="font-weight-bold mb-0 small">
-													Estimated cost
+													<I18NSwitch
+														default="Estimated cost:"
+														fr="Coût estimé:"
+													/>
 												</p>
 												<p className="mb-0 small">
-													$
-													{(
-														(bookingTimeLength / (1000 * 60 * 60)) *
-														vehicle.price
-													).toFixed(2)}
+													<I18NDollar
+														number={
+															(bookingTimeLength / (1000 * 60 * 60)) *
+															vehicle.price
+														}
+													/>
 												</p>
 											</div>
 										</div>
@@ -491,35 +575,57 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 					</div>
 					<div className="modal-footer d-flex align-items-center justify-content-between">
 						{step === NUM_STEPS - 1 ? (
-							<p className="text-muted mb-0 small text-center">
-								Your credit card will be charged $
-								{(
-									(bookingTimeLength / (1000 * 60 * 60)) * vehicle.price +
-									50
-								).toFixed(2)}{' '}
-								as a deposit until the end of the trip.
+							<p className="col text-muted mb-0 small text-left">
+								<I18NSwitch
+									fr={
+										<>
+											Votre carte de crédit sera débitée de{' '}
+											<I18NDollar
+												number={
+													(bookingTimeLength / (1000 * 60 * 60)) *
+														vehicle.price +
+													50
+												}
+											/>{' '}
+											à titre de dépôt jusqu&apos;à la fin du voyage.
+										</>
+									}
+									default={
+										<>
+											Your credit card will be charged{' '}
+											<I18NDollar
+												number={
+													(bookingTimeLength / (1000 * 60 * 60)) *
+														vehicle.price +
+													50
+												}
+											/>{' '}
+											as a deposit until the end of the trip.
+										</>
+									}
+								/>
 							</p>
 						) : (
-							<div></div>
+							<div className="col"></div>
 						)}
 
-						<div>
+						<div className="col text-right">
 							{step !== 0 && (
 								<button
 									type="button"
 									className="btn btn-secondary"
 									onClick={() => setStep((s) => s - 1)}
 								>
-									Back
+									<I18NSwitch fr="Arrière" default="Back" />
 								</button>
 							)}
 							{step !== NUM_STEPS - 1 ? (
 								<button
 									type="button"
-									className="btn btn-success"
+									className="btn btn-success ml-2"
 									onClick={() => setStep((s) => s + 1)}
 								>
-									Next
+									<I18NSwitch fr="Prochain" default="Next" />
 								</button>
 							) : (
 								<button
@@ -530,7 +636,10 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 										$(modalRef.current).modal('hide')
 									}}
 								>
-									Create booking
+									<I18NSwitch
+										fr="Créer une réservation"
+										default="Create booking"
+									/>
 								</button>
 							)}
 						</div>

@@ -12,6 +12,7 @@ import { Vehicles } from '../models/vehicles'
 import { useAsyncAction } from '../hooks/state'
 import { useTooltip } from './tooltip'
 import { BookingModal } from './booking-modal'
+import { I18NSwitch } from '../hooks/i18n'
 
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY
 
@@ -145,8 +146,10 @@ export function Search() {
 				<div className="row flex-grow-1">
 					<div className="col d-flex align-items-center justify-content-center">
 						<h3>
-							To use this application, please enable access to your location
-							above.
+							<I18NSwitch
+								fr="Pour utiliser cette application, veuillez activer l'accès à votre emplacement au dessus."
+								default="To use this application, please enable access to your location above."
+							/>
 						</h3>
 					</div>
 				</div>
@@ -158,7 +161,12 @@ export function Search() {
 		<div className="container-fluid flex-grow-1 d-flex justify-content-center px-0">
 			<div className="row flex-grow-1 no-gutters">
 				<div className="col-3 bg-white p-3">
-					<p className="font-weight-bold mb-3">Search for vehicles</p>
+					<p className="font-weight-bold mb-3">
+						<I18NSwitch
+							fr="Recherche de véhicules"
+							default="Search for vehicles"
+						/>
+					</p>
 
 					<form
 						onSubmit={(evt) => {
@@ -176,12 +184,17 @@ export function Search() {
 
 						<div className="form-group d-none">
 							<label htmlFor="" className="col-form-label">
-								Location
+								<I18NSwitch fr="Emplacement" default="Location" />
 							</label>
 							<input
 								type="text"
 								className="form-control"
-								placeholder="Enter an address to use instead of your location"
+								placeholder={
+									<I18NSwitch
+										fr="Entrez une adresse à utiliser à la place de votre emplacement"
+										default="Enter an address to use instead of your location"
+									/>
+								}
 								value={address}
 								onChange={(evt) => setAddress(evt.target.value)}
 							/>
@@ -190,7 +203,7 @@ export function Search() {
 						<div className="form-group">
 							<label htmlFor="carType" className="col-form-label">
 								<i className="mr-2 fas fa-car-side" />
-								Vehicle type
+								<I18NSwitch fr="Type de véhicule" default="Vehicle type" />
 							</label>
 							<select
 								id="carType"
@@ -198,16 +211,28 @@ export function Search() {
 								value={carType}
 								onChange={(evt) => setCarType(evt.target.value)}
 							>
-								<option value="all">All</option>
-								<option value="sedan">Sedan</option>
-								<option value="suv">SUV</option>
+								<I18NSwitch
+									fr={<option value="all">Tous les véhicules</option>}
+									default={<option value="all">All</option>}
+								/>
+								<I18NSwitch
+									fr={<option value="sedan">Les puis</option>}
+									default={<option value="sedan">Sedan</option>}
+								/>
+								<I18NSwitch
+									fr={<option value="suv">VLT</option>}
+									default={<option value="suv">SUV</option>}
+								/>
 							</select>
 						</div>
 
 						<div className="form-group">
 							<label htmlFor="priceRange" className="col-form-label">
 								<i className="mr-2 fas fa-dollar-sign" />
-								Price range
+								<I18NSwitch
+									fr="Échelle des prix (par heure)"
+									default="Price range (per hour)"
+								/>
 							</label>
 							<div className="input-group" id="priceRange">
 								<input
@@ -244,21 +269,14 @@ export function Search() {
 								/>
 							</div>
 							<p className="small d-flex justify-content-between px-1 text-secondary">
-								<span>Minimum</span>
-								<span>Maximum</span>
+								<span>
+									<I18NSwitch default="Minimum" />
+								</span>
+								<span>
+									<I18NSwitch default="Maximum" />
+								</span>
 							</p>
 						</div>
-
-						{/* <div className="form-group text-center">
-							<button
-								type="submit"
-								className="btn btn-primary"
-								disabled={isLoading}
-							>
-								<i className="mr-2 fas fa-search" />
-								Search
-							</button>
-						</div> */}
 					</form>
 				</div>
 				<div className="col">

@@ -3,7 +3,7 @@
     "name": "seg3125-lab8",
     "version": "0.0.0",
     "scripts": {
-        "start": "parcel serve --https --port 3000 src/index.html",
+        "start": "parcel serve --https --port 3000 --hmr-port 3001 src/index.html",
         "build": "parcel build --no-content-hash --no-source-maps --public-url /lab8/ src/index.html -d ../dist/lab8"
     },
     "devDependencies": {
@@ -30,6 +30,7 @@
         "htm": "^3.0.4",
         "jquery": "^3.5.1",
         "moment": "^2.27.0",
+        "ms-i18n": "^0.3.0",
         "popper.js": "^1.16.1",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
