@@ -314,7 +314,12 @@ export function Search() {
 						{advancedSearchEnabled && (
 							<>
 								<div className="form-group">
-									<label className="col-form-label">Manufacturer</label>
+									<label className="col-form-label">
+										<I18NSwitch
+											fr="Fabricant de véhicule"
+											default="Manufacturer"
+										/>
+									</label>
 									<select
 										className="form-control"
 										value={manufacturer}
@@ -330,7 +335,9 @@ export function Search() {
 								</div>
 
 								<div className="form-group">
-									<label className="col-form-label">Model</label>
+									<label className="col-form-label">
+										<I18NSwitch fr="Modèle de véhicule" default="Model" />
+									</label>
 									<select
 										className="form-control"
 										value={model}
@@ -354,7 +361,7 @@ export function Search() {
 									className="btn btn-link btn-sm small px-0"
 									onClick={() => setAdvancedSearchEnabled(false)}
 								>
-									Simple search
+									<I18NSwitch default="Simple search" fr="Recherche simple" />
 								</button>
 							) : (
 								<button
@@ -362,7 +369,10 @@ export function Search() {
 									className="btn btn-link btn-sm small px-0"
 									onClick={() => setAdvancedSearchEnabled(true)}
 								>
-									Advanced search
+									<I18NSwitch
+										default="Advanced search"
+										fr="Recherche Avancée"
+									/>
 								</button>
 							)}
 						</div>

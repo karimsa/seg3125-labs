@@ -213,10 +213,7 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 														</th>
 														<td></td>
 														<td>
-															<I18NSwitch
-																fr={`${vehicle.price.toFixed(2)} $ (USD)`}
-																default={`$ ${vehicle.price.toFixed(2)} (USD)`}
-															/>
+															<I18NDollar number={vehicle.price} /> (USD)
 														</td>
 													</tr>
 													<tr>
@@ -228,12 +225,7 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 														</th>
 														<td></td>
 														<td>
-															<I18NSwitch
-																fr={`${vehicle.pricePerKm.toFixed(2)} $ (USD)`}
-																default={`$ ${vehicle.pricePerKm.toFixed(
-																	2,
-																)} (USD)`}
-															/>
+															<I18NDollar number={vehicle.pricePerKm} /> (USD)
 														</td>
 													</tr>
 													<tr>
