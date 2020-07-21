@@ -285,7 +285,7 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 													key={offering.planID}
 												>
 													<InsuranceCard
-														title={offering.title[lang]}
+														title={offering.title[lang] || offering.title.en}
 														price={offering.price}
 														isSelected={
 															booking.insurancePlan === offering.planID
@@ -302,7 +302,8 @@ export const BookingModal = forwardRef(function ({ vehicle }, modalRef) {
 										</div>
 										<div className="col d-flex align-items-center">
 											<p className="lead text-center">
-												{activeInsurancePlan.description[lang]}
+												{activeInsurancePlan.description[lang] ||
+													activeInsurancePlan.description.en}
 											</p>
 										</div>
 									</div>
